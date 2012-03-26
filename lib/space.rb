@@ -1,0 +1,23 @@
+require 'yaml'
+require 'hashr'
+require 'core_ext/enumerable'
+
+module Space
+  autoload :App,        'space/app'
+  autoload :Helpers,    'space/helpers'
+  autoload :Bundle,     'space/models/bundle'
+  autoload :Commands,   'space/models/commands'
+  autoload :Command,    'space/models/command'
+  autoload :Dependency, 'space/models/dependency'
+  autoload :Git,        'space/models/git'
+  autoload :Repos,      'space/models/repos'
+  autoload :Repo,       'space/models/repo'
+  autoload :Screen,     'space/screen'
+  autoload :System,     'space/system'
+  autoload :View,       'space/view'
+
+  TEMPLATES = {
+    :project => 'templates/project.erb',
+    :repo    => 'templates/repository.erb'
+  }
+end
