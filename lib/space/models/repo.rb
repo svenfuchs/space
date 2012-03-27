@@ -1,13 +1,12 @@
 module Space
   class Repo
-    attr_reader :app, :number, :path, :git, :bundle
+    attr_reader :number, :path, :git, :bundle
 
-    def initialize(app, number, path)
-      @app = app
+    def initialize(number, path)
       @number = number
       @path = File.expand_path(path)
       @git = Git.new(path)
-      @bundle = Bundle.new(app, path)
+      @bundle = Bundle.new(path)
     end
 
     def name
@@ -18,12 +17,8 @@ module Space
       git.commit
     end
 
-    def current?
-      app.scope == self
-    end
-
-    def dependent_repos
-      bundle.deps.map { |dep| app.repos.all.detect { |repo| repo.name == dep.name } }
+    def dependencies
+      Repos.select(bundle.deps.map(&:name))
     end
 
     def reset
@@ -32,7 +27,10 @@ module Space
     end
 
     def execute(cmd)
-      chdir { system(cmd) }
+      chdir do
+        puts "in #{path}".ansi(:bold, :yellow)
+        system(cmd)
+      end
     end
 
     def chdir(&block)

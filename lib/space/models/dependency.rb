@@ -1,9 +1,8 @@
 module Space
   class Dependency
-    attr_reader :app, :name, :ref
+    attr_reader :name, :ref
 
-    def initialize(app, name, ref)
-      @app = app
+    def initialize(name, ref)
       @name = name
       @ref = ref
     end
@@ -13,7 +12,7 @@ module Space
     end
 
     def repo
-      app.repos.detect { |repo| repo.name == name }
+      Repos.find_by_name(name)
     end
   end
 end

@@ -1,63 +1,81 @@
 module Space
   class Action
+    autoload :Parser, 'space/action/parser'
+
     class << self
       def run(app, line)
-        action = new(app, *parse(app.repos.names, line))
-        action.run if action
-      end
-
-      def parse(names, line)
-        [parse_repo(names, line), line.strip]
-      end
-
-      def parse_repo(names, line)
-        repo = nil
-        line.gsub!(/^(#{names.join('|')}|\d+)/) do |name|
-          repo = name =~ /^\d+$/ ? names[name.to_i - 1] : name
-          ''
-        end
-        repo
+        new(app, *Parser.new(app.repos.names).parse(line)).run
       end
     end
 
-    attr_reader :app, :repo, :command
+    attr_reader :app, :repos, :command, :args
 
-    def initialize(app, repo, command)
+    def initialize(app, repos, command, *args)
       @app = app
-      @repo = app.repos.find_by_name(repo) || app.scope
+      @repos = Repos.select(repos) if repos
       @command = normalize(command)
+      @args = args
     end
 
     def run
       if respond_to?(command)
         send(command)
-      elsif repo
+      elsif command
         execute(command)
       end
     end
 
     def reload
-      repo ? repo.reset : app.repos.each(&:reset)
+      app.bundle.reset
+      run_scoped(true) do |repo|
+        repo.reset
+      end
     end
 
     def scope
-      app.scope = repo
+      app.repos = repos
     end
 
     def unscope
-      app.scope = nil
+      app.repos = nil
     end
 
-    def execute(command)
-      puts
-      repo.execute(command)
+    def local
+      run_scoped do |repo|
+        system "bundle config --global local.#{repo.name} #{repo.path}"
+      end
+    end
+
+    def remote
+      run_scoped do |repo|
+        system "bundle config --delete local.#{repo.name}"
+      end
+    end
+
+    def execute(cmd)
+      run_scoped do |repo|
+        puts
+        repo.execute(cmd)
+      end
+    end
+
+    def run_scoped(reloading = false)
+      (repos || app.repos).each { |repo| yield repo }
+      confirm && reload unless reloading
+    end
+
+    def system(cmd)
+      puts cmd
+      super
+    end
+
+    def confirm
       puts "\n--- hit any key to continue ---\n"
       STDIN.getc
-      reload
     end
 
     def normalize(command)
-      command = command.strip
+      command = (command || '').strip
       command = 'unscope' if command == '-'
       command = 'scope'   if command.empty?
       command

@@ -10,8 +10,12 @@ module Space
 
     def repo_title
       title = "#{repo.name.ansi(:bold)} [#{git.branch}, #{git.commit}] [#{repo.number}]"
-      title += " *" if repo.current?
+      title += " *" if repo_selected?
       title
+    end
+
+    def repo_selected?
+      app.repos.scoped? && app.repos.include?(repo)
     end
 
     def git_status
@@ -23,7 +27,7 @@ module Space
     end
 
     def bundle_info
-      "#{bundle.info}\n" unless bundle.clean?
+      bundle.info.ansi(:red) unless bundle.clean?
     end
 
     def bundle_deps

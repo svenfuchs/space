@@ -1,35 +1,45 @@
 module Space
-  class Repos
-    include Enumerable
+  class Repos < Array
+    class << self
+      def all
+        @all ||= create(App.config.paths)
+      end
 
-    attr_reader :app
+      def names
+        @names ||= all.map(&:name)
+      end
 
-    def initialize(app)
-      @app = app
+      def select(names)
+        new(all.select { |repo| names.include?(repo.name) })
+      end
+
+      def find_by_name(name)
+        all.find_by_name(name)
+      end
+
+      def create(paths)
+        new(paths.map_with_index { |path, ix| Repo.new(ix + 1, path) })
+      end
     end
 
-    def [](index)
-      scoped[index]
+    def names
+      map(&:name)
     end
 
-    def each(&block)
-      all.each(&block)
+    def scoped?
+      size != self.class.all.size
     end
+
+    # def name
+    #   "#{App.config.name}-(#{names.join('|').gsub("#{App.config.name}-", '')})"
+    # end
 
     def find_by_name(name)
       detect { |repo| repo.name == name }
     end
 
-    def scoped
-      app.scope ? ([app.scope] + app.scope.dependent_repos).uniq : all
-    end
-
-    def names
-      all.map { |repo| repo.name }
-    end
-
-    def all
-      @all ||= app.config.paths.map_with_index { |path, ix| Repo.new(app, ix + 1, path) }
+    def self_and_dependencies
+      self.class.new(map { |repo| [repo.name] + repo.dependencies }.flatten.uniq)
     end
   end
 end

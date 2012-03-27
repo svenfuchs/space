@@ -1,9 +1,0 @@
-name: travis
-base_dir: ~/Development/projects/travis
-repositories:
-  - travis-ci
-  - travis-hub
-  - travis-listener
-  - travis-core
-  - travis-support
-

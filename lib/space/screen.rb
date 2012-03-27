@@ -9,7 +9,7 @@ module Space
     def render
       system 'clear'
       puts render_project
-      app.repos.scoped.each { |repo| puts render_repo(repo) }
+      app.repos.each { |repo| puts render_repo(repo) }
     end
 
     private
@@ -19,7 +19,7 @@ module Space
       end
 
       def render_repo(repo)
-        View.new.render(:repo, :repo => repo, :git => repo.git, :bundle => repo.bundle)
+        View.new.render(:repo, :app => app, :repo => repo, :git => repo.git, :bundle => repo.bundle)
       end
   end
 end

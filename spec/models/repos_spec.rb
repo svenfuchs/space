@@ -1,17 +1,31 @@
 require 'spec_helper'
 
 describe Repos do
-  describe 'scoped' do
-    it 'returns all repositories when the app does not have a scope'
-    it 'returns the current app scope repository and all of its dependent repos'
+  let(:config) { Hashr.new(:paths => paths) }
+  let(:paths)  { %w(/path/to/foo /path/to/bar /path/to/baz) }
+
+  before :each do
+    App.stubs(:config).returns(config)
   end
 
-  describe 'all' do
-    it 'returns all repositories for paths defined in the config'
+  describe 'class methods' do
+    it 'all returns a collection of all repos as defined in the config' do
+      Repos.all.map(&:path).should == config.paths
+    end
+
+    it 'select returns a collection scoped to the given names' do
+      Repos.select(%w(foo bar)).names.should == %w(foo bar)
+    end
+
+    it 'find_by_name finds the repository by name' do
+      Repos.find_by_name('foo').name.should == 'foo'
+    end
   end
 
-  describe 'find_by_name' do
-    it 'finds the repo by its name'
+  describe 'instance methods' do
+    it 'names returns the names of the contained repositories' do
+      Repos.all.names.should == %w(foo bar baz)
+    end
   end
 end
 

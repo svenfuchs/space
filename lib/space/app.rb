@@ -2,26 +2,33 @@ require 'readline'
 
 module Space
   class App
-    class Config < Hashr
-      def paths
-        @paths ||= repositories.map { |path| "#{base_dir}/#{path}" }
+    class << self
+      attr_reader :config
+
+      def run(name)
+        @config = Config.load(name)
+        new(config.name || name).run
       end
     end
 
     include Readline
 
-    attr_accessor :screen, :name, :config, :repos, :bundle, :scope
+    attr_accessor :screen, :name, :repos, :bundle, :path
 
-    def initialize
+    def initialize(name)
       @screen = Screen.new(self)
-      @config = Config.new(YAML.load(File.read('space.yml')))
-      @name   = config.name
-      @repos  = Repos.new(self)
-      @bundle = Bundle.new(self, config.paths.first)
+      @name   = name
+      @bundle = Bundle.new(self.class.config.paths.first)
+      @path   = File.expand_path('.')
     end
 
     def prompt
-      "#{scope ? scope.name : ''} >".strip + ' '
+      # "#{repos.name} >".strip + ' '
+      '> '
+    end
+
+    def repos
+      @repos ||= Repos.all
     end
 
     def run
@@ -38,5 +45,19 @@ module Space
       Action.run(self, line)
       screen.render
     end
+
+    def reset
+      bundle.reset
+      repos.each(&:reset)
+    end
+
+    def execute(cmd)
+      chdir { system(cmd) }
+    end
+
+    def chdir(&block)
+      Dir.chdir(path, &block)
+    end
   end
 end
+

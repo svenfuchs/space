@@ -3,4 +3,4 @@
 $: << 'lib'
 require 'space'
 
-Space::App.new.run
+Space::App.run(ARGV[0])
