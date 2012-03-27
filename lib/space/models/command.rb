@@ -1,3 +1,5 @@
+require 'ansi/code'
+
 module Space
   class Command
     attr_reader :path, :command
@@ -20,7 +22,7 @@ module Space
     end
 
     def strip_ansi(string)
-      string.gsub(/\e\[\d+m/, '')
+      string.gsub(ANSI::Code::PATTERN, '')
     end
   end
 end

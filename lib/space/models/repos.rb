@@ -13,7 +13,7 @@ module Space
     end
 
     def each(&block)
-      scoped.each(&block)
+      all.each(&block)
     end
 
     def find_by_name(name)

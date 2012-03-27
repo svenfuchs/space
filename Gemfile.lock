@@ -1,0 +1,12 @@
+GEM
+  remote: http://rubygems.org/
+  specs:
+    ansi (1.4.2)
+    hashr (0.0.19)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ansi
+  hashr

@@ -49,6 +49,7 @@ module Space
     end
 
     def execute(command)
+      puts
       repo.execute(command)
       puts "\n--- hit any key to continue ---\n"
       STDIN.getc

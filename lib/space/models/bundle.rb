@@ -5,7 +5,7 @@ module Space
     COMMANDS = {
       :check  => 'bundle check',
       :list   => 'bundle list',
-      :config => 'bundle config --global'
+      :config => 'bundle config'
     }
 
     attr_reader :app

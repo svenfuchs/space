@@ -18,7 +18,7 @@ module Space
   autoload :View,       'space/view'
 
   TEMPLATES = {
-    :project => 'templates/project.erb',
-    :repo    => 'templates/repository.erb'
+    :project => 'lib/space/templates/project.erb',
+    :repo    => 'lib/space/templates/repository.erb'
   }
 end

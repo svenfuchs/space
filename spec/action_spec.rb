@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe Action do
-  let(:app)   { stub('app', :repos => repos) }
-  let(:repos) { stub('repos', :names => names) }
   let(:names) { %w(travis-ci) }
 
   describe 'parse_repo' do

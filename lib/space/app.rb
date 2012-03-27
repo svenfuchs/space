@@ -21,7 +21,7 @@ module Space
     end
 
     def prompt
-      "#{scope ? scope.name : ''} > "
+      "#{scope ? scope.name : ''} >".strip + ' '
     end
 
     def run
