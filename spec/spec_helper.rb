@@ -1,0 +1,3 @@
+require 'space'
+
+include Space

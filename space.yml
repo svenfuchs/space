@@ -2,7 +2,7 @@ name: travis
 base_dir: ~/Development/projects/travis
 repositories:
   - travis-pro-ci
-  # - travis-pro-hub
+  - travis-pro-hub
   # - travis-pro-listener
   # - travis-pro-core
   # - travis-ci

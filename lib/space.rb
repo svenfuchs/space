@@ -3,6 +3,7 @@ require 'hashr'
 require 'core_ext/enumerable'
 
 module Space
+  autoload :Action,     'space/action'
   autoload :App,        'space/app'
   autoload :Helpers,    'space/helpers'
   autoload :Bundle,     'space/models/bundle'

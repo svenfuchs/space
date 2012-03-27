@@ -8,6 +8,12 @@ module Space
       "Project: #{app.name}".ansi(:bold)
     end
 
+    def repo_title
+      title = "#{repo.name.ansi(:bold)} [#{git.branch}, #{git.commit}] [#{repo.number}]"
+      title += " *" if repo.current?
+      title
+    end
+
     def git_status
       "Git: #{format_boolean(git.clean?)}"
     end

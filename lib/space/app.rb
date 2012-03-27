@@ -10,7 +10,7 @@ module Space
 
     include Readline
 
-    attr_reader :screen, :name, :config, :repos, :bundle
+    attr_accessor :screen, :name, :config, :repos, :bundle, :scope
 
     def initialize
       @screen = Screen.new(self)
@@ -20,10 +20,14 @@ module Space
       @bundle = Bundle.new(self, config.paths.first)
     end
 
+    def prompt
+      "#{scope ? scope.name : ''} > "
+    end
+
     def run
       screen.render
       loop do
-        line = readline('huzzar > ', true)
+        line = readline(prompt, true)
         break if line.nil?
         handle(line) unless line.empty?
       end
@@ -31,19 +35,8 @@ module Space
     end
 
     def handle(line)
-      action = parse(line)
-      # action.run
+      Action.run(self, line)
       screen.render
-    end
-
-    def parse(line)
-      line =~ /(\S+) (.+)/
-      name, command = $1, $2
-      repo = repos.detect { |repo| repo.name == name }
-      case $2
-      when 'reload'
-        repo.reset
-      end
     end
   end
 end
