@@ -3,22 +3,31 @@ require 'readline'
 module Space
   class App
     class << self
-      attr_reader :config
+      attr_reader :instance
 
       def run(name)
-        @config = Config.load(name)
-        new(config.name || name).run
+        @instance = new(name)
+        instance.run
+      end
+
+      def name
+        instance.name
+      end
+
+      def config
+        instance.config
       end
     end
 
     include Readline
 
-    attr_accessor :screen, :name, :repos, :bundle, :path
+    attr_accessor :screen, :name, :config, :repos, :bundle, :path
 
     def initialize(name)
       @screen = Screen.new(self)
       @name   = name
-      @bundle = Bundle.new(self.class.config.paths.first)
+      @config = Config.load(name)
+      @bundle = Bundle.new(config.paths.first)
       @path   = File.expand_path('.')
     end
 

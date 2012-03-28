@@ -31,7 +31,7 @@ module Space
     end
 
     # def name
-    #   "#{App.config.name}-(#{names.join('|').gsub("#{App.config.name}-", '')})"
+    #   "#{App.name}-(#{names.join('|').gsub("#{App.config.name}-", '')})"
     # end
 
     def find_by_name(name)
@@ -39,7 +39,7 @@ module Space
     end
 
     def self_and_dependencies
-      self.class.new(map { |repo| [repo.name] + repo.dependencies }.flatten.uniq)
+      self.class.new(map { |repo| [repo] + repo.dependencies }.flatten.uniq)
     end
   end
 end

@@ -3,4 +3,5 @@
 $: << 'lib'
 require 'space'
 
+abort 'Need to specify a project name' if ARGV.empty?
 Space::App.run(ARGV[0])

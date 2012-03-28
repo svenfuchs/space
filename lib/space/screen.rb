@@ -9,7 +9,10 @@ module Space
     def render
       system 'clear'
       puts render_project
-      app.repos.each { |repo| puts render_repo(repo) }
+      repos = app.repos.scoped? ? app.repos.self_and_dependencies : app.repos
+      repos.each do |repo|
+        puts render_repo(repo)
+      end
     end
 
     private
