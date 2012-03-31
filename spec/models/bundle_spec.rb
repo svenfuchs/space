@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe Bundle do
-  let(:app)    { stub('app', :name => 'travis') }
-  let(:repo)   { stub('repo', :name => 'travis-ci') }
+  let(:app)    { stub('app', name: 'travis') }
+  let(:repo)   { stub('repo', name: 'travis-ci') }
   let(:repos)  { stub('repos') }
   let(:bundle) { Bundle.new('travis', repos, 'path/to/repo') }
 
@@ -32,7 +32,7 @@ describe Bundle do
 
   describe 'deps' do
     it 'returns dependencies listend in `bundle list` that match the app name' do
-      bundle.stubs(:result).with(:list, :name => 'travis').returns("  * travis-ci (0.0.1 123456)")
+      bundle.stubs(:result).with(:list, name: 'travis').returns("  * travis-ci (0.0.1 123456)")
       dep = bundle.deps.first
       [dep.name, dep.ref].should == ['travis-ci', '123456']
     end

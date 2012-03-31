@@ -3,9 +3,9 @@ module Space
     include Commands
 
     COMMANDS = {
-      :check  => 'bundle check',
-      :list   => 'bundle list | grep %<name>s',
-      :config => 'bundle config'
+      check:  'bundle check',
+      list:   'bundle list | grep %<name>s',
+      config: 'bundle config'
     }
 
     attr_reader :name, :repos
@@ -25,7 +25,7 @@ module Space
     end
 
     def deps
-      result(:list, :name => name).split("\n").map do |dep|
+      result(:list, name: name).split("\n").map do |dep|
         matches = dep.strip.match /^\* (?<name>[\S]+) \(\d+\.\d+\.\d+(?: (?<ref>.+))?\)/
         Dependency.new(repos, matches[:name], matches[:ref])
       end.compact

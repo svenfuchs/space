@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Repos do
-  let(:config) { Hashr.new(:paths => paths) }
+  let(:config) { Hashr.new(paths: paths) }
   let(:paths)  { %w(/path/to/foo /path/to/bar /path/to/baz) }
 
   before :each do

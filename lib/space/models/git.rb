@@ -8,9 +8,9 @@ module Space
     include Commands
 
     COMMANDS = {
-      :status => 'git status',
-      :branch => 'git branch --no-color',
-      :commit => 'git log -1 head'
+      status: 'git status',
+      branch: 'git branch --no-color',
+      commit: 'git log -1 head'
     }
 
     def initialize(path)
