@@ -25,7 +25,7 @@ module Space
       end
     end
 
-    def reload
+    def refresh
       app.bundle.reset
       run_scoped(true) do |repo|
         repo.reset
@@ -52,6 +52,26 @@ module Space
       end
     end
 
+    def install
+      # bundle install
+      # refresh
+    end
+
+    def update
+      # bundle update all outdated deps
+      # git commit if successful
+      # refresh
+    end
+
+    def checkout
+      # check if branch exists, git co (-b)
+      # check Gemfiles, replace gem "travis-*", :branch => '...' with the new branch
+    end
+
+    def pull_deps
+      # pull all dependencies
+    end
+
     def execute(cmd)
       run_scoped do |repo|
         puts
@@ -59,9 +79,9 @@ module Space
       end
     end
 
-    def run_scoped(reloading = false)
+    def run_scoped(refreshing = false)
       (repos || app.repos).each { |repo| yield repo }
-      confirm && reload unless reloading
+      confirm unless refreshing
     end
 
     def system(cmd)
