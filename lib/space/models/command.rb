@@ -9,8 +9,8 @@ module Space
       @command = command
     end
 
-    def result
-      @result ||= chdir { strip_ansi(`#{command}`) }
+    def result(args = {})
+      @result ||= chdir { strip_ansi(`#{command % args}`) }
     end
 
     def reset

@@ -4,7 +4,7 @@ module Space
 
     COMMANDS = {
       :check  => 'bundle check',
-      :list   => 'bundle list',
+      :list   => 'bundle list | grep %<name>s',
       :config => 'bundle config'
     }
 
@@ -21,9 +21,9 @@ module Space
     end
 
     def deps
-      result(:list).split("\n").map do |dep|
-        dep =~ /(#{App.name}.*) \(\d\.\d\.\d (.+)\)/
-        Dependency.new($1, $2) if Repos.names.include?($1)
+      result(:list, :name => App.name).split("\n").map do |dep|
+        matches = dep.strip.match /^\* (?<name>[\S]+) \(\d+\.\d+\.\d+(?: (?<ref>.+))?\)/
+        Dependency.new(matches[:name], matches[:ref])
       end.compact
     end
 

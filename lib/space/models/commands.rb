@@ -6,8 +6,8 @@ module Space
       @path = path
     end
 
-    def result(command)
-      commands[command].result
+    def result(command, args = {})
+      commands[command].result(args)
     end
 
     def commands

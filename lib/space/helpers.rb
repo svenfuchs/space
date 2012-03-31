@@ -19,7 +19,11 @@ module Space
     end
 
     def git_status
-      "Git: #{format_boolean(git.clean?)}"
+      "Git: #{format_boolean(git.clean?)}#{git_ahead if git.ahead?}"
+    end
+
+    def git_ahead
+      " #{git.ahead} commits ahead".ansi(:cyan)
     end
 
     def bundle_status
