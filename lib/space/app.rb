@@ -21,23 +21,19 @@ module Space
 
     include Readline
 
-    attr_accessor :screen, :name, :config, :repos, :bundle, :path
+    attr_reader :name, :config, :repos, :bundle, :screen
 
     def initialize(name)
-      @screen = Screen.new(self)
       @name   = name
       @config = Config.load(name)
-      @bundle = Bundle.new(config.paths.first)
-      @path   = File.expand_path('.')
+      @repos  = Repos.new(name, config.paths)
+      @bundle = Bundle.new(name, repos, config.paths.first)
+      @screen  = Screen.new(name, repos, bundle)
     end
 
     def prompt
       # "#{repos.name} >".strip + ' '
       '> '
-    end
-
-    def repos
-      @repos ||= Repos.all
     end
 
     def run

@@ -3,7 +3,8 @@ require 'spec_helper'
 describe Bundle do
   let(:app)    { stub('app', :name => 'travis') }
   let(:repo)   { stub('repo', :name => 'travis-ci') }
-  let(:bundle) { Bundle.new('path/to/repo') }
+  let(:repos)  { stub('repos') }
+  let(:bundle) { Bundle.new('travis', repos, 'path/to/repo') }
 
   before :each do
     app.stubs(:repos).returns([repo])

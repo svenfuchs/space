@@ -5,7 +5,7 @@ require 'core_ext/string'
 module Space
   module Helpers
     def project_title
-      "Project: #{app.name}".ansi(:bold)
+      "Project: #{name}".ansi(:bold)
     end
 
     def repo_title
@@ -15,7 +15,7 @@ module Space
     end
 
     def repo_selected?
-      app.repos.scoped? && app.repos.include?(repo)
+      repos.scoped? && repos.scope.include?(repo)
     end
 
     def git_status

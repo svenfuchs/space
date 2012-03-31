@@ -8,12 +8,13 @@ module Space
       :config => 'bundle config'
     }
 
-    # watch do
-    #   %W(
-    #     #{path}/Gemfile
-    #     #{path}/Gemfile.lock
-    #   )
-    # end
+    attr_reader :name, :repos
+
+    def initialize(name, repos, path)
+      @name = name
+      @repos = repos
+      super(path)
+    end
 
     def clean?
       info =~ /dependencies are satisfied/
@@ -24,9 +25,9 @@ module Space
     end
 
     def deps
-      result(:list, :name => App.name).split("\n").map do |dep|
+      result(:list, :name => name).split("\n").map do |dep|
         matches = dep.strip.match /^\* (?<name>[\S]+) \(\d+\.\d+\.\d+(?: (?<ref>.+))?\)/
-        Dependency.new(matches[:name], matches[:ref])
+        Dependency.new(repos, matches[:name], matches[:ref])
       end.compact
     end
 

@@ -1,45 +1,47 @@
 module Space
-  class Repos < Array
-    class << self
-      def all
-        @all ||= create(App.config.paths)
+  class Repos
+    class Scope < Array
+      attr_reader :repos
+
+      def initialize(repos, elements)
+        @repos = repos
+        super(elements)
       end
 
-      def names
-        @names ||= all.map(&:name)
-      end
-
-      def select(names)
-        new(all.select { |repo| names.include?(repo.name) })
-      end
-
-      def find_by_name(name)
-        all.find_by_name(name)
-      end
-
-      def create(paths)
-        new(paths.map_with_index { |path, ix| Repo.new(ix + 1, path) })
+      def self_and_dependencies
+        Scope.new(repos, (self + map(&:dependencies)).flatten.uniq)
       end
     end
 
-    def names
-      map(&:name)
+    attr_accessor :name, :paths, :scope
+
+    def initialize(name, paths)
+      @name = name
+      @paths = paths
+    end
+
+    def all
+      @all ||= Scope.new(self, paths.map_with_index { |path, ix| Repo.new(name, self, ix + 1, path) })
+    end
+
+    def scope
+      @scope || all
     end
 
     def scoped?
-      size != self.class.all.size
+      !!@scope
     end
 
-    # def name
-    #   "#{App.name}-(#{names.join('|').gsub("#{App.config.name}-", '')})"
-    # end
+    def names
+      all.map(&:name)
+    end
 
     def find_by_name(name)
-      detect { |repo| repo.name == name }
+      all.detect { |repo| repo.name == name }
     end
 
-    def self_and_dependencies
-      self.class.new(map { |repo| [repo] + repo.dependencies }.flatten.uniq)
+    def select_by_names(names)
+      Scope.new(self, all.select { |repo| names.include?(repo.name) })
     end
   end
 end

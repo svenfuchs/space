@@ -1,12 +1,13 @@
 module Space
   class Repo
-    attr_reader :number, :path, :git, :bundle
+    attr_reader :repos, :number, :path, :git, :bundle
 
-    def initialize(number, path)
+    def initialize(name, repos, number, path)
+      @repos  = repos
       @number = number
-      @path = File.expand_path(path)
-      @git = Git.new(path)
-      @bundle = Bundle.new(path)
+      @path   = File.expand_path(path)
+      @git    = Git.new(path)
+      @bundle = Bundle.new(name, repos, path)
     end
 
     def name
@@ -18,7 +19,7 @@ module Space
     end
 
     def dependencies
-      Repos.select(bundle.deps.map(&:name))
+      repos.select_by_names(bundle.deps.map(&:name))
     end
 
     def reset

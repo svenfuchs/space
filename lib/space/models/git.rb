@@ -13,6 +13,10 @@ module Space
       :commit => 'git log -1 head'
     }
 
+    def initialize(path)
+      super(path)
+    end
+
     def branch
       result(:branch) =~ /^\* (.+)/ && $1.strip
     end

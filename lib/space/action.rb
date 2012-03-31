@@ -11,10 +11,10 @@ module Space
     attr_reader :app, :repos, :command, :args
 
     def initialize(app, repos, command, *args)
-      @app = app
-      @repos = Repos.select(repos) if repos
+      @app     = app
+      @repos   = app.repos.select_by_names(repos) if repos
       @command = normalize(command)
-      @args = args
+      @args    = args
     end
 
     def run
@@ -23,6 +23,7 @@ module Space
       elsif command
         execute(command)
       end
+      app.screen.render
     end
 
     def refresh
@@ -33,11 +34,11 @@ module Space
     end
 
     def scope
-      app.repos = repos
+      app.repos.scope = repos
     end
 
     def unscope
-      app.repos = nil
+      app.repos.scope = nil
     end
 
     def local
