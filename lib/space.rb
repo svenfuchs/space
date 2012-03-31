@@ -17,6 +17,7 @@ module Space
   autoload :Screen,     'space/screen'
   autoload :System,     'space/system'
   autoload :View,       'space/view'
+  autoload :Watch,      'space/watch'
 
   TEMPLATES = {
     :project => 'lib/space/templates/project.erb',

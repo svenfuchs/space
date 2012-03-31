@@ -8,9 +8,12 @@ module Space
       :config => 'bundle config'
     }
 
-    def initialize(path)
-      super(path)
-    end
+    # watch do
+    #   %W(
+    #     #{path}/Gemfile
+    #     #{path}/Gemfile.lock
+    #   )
+    # end
 
     def clean?
       info =~ /dependencies are satisfied/

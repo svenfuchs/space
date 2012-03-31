@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/niw/rb-fsevent.git
+  revision: 8754b16bd3b880a60621e01b0f7792c009c8e8a7
+  specs:
+    rb-fsevent (0.4.3)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -25,4 +31,5 @@ DEPENDENCIES
   hashr
   mocha
   rake
+  rb-fsevent!
   rspec

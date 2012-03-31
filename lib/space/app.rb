@@ -55,18 +55,18 @@ module Space
       screen.render
     end
 
-    def reset
-      bundle.reset
-      repos.each(&:reset)
-    end
+    # def reset
+    #   bundle.reset
+    #   repos.each(&:reset)
+    # end
 
-    def execute(cmd)
-      chdir { system(cmd) }
-    end
+    # def execute(cmd)
+    #   chdir { system(cmd) }
+    # end
 
-    def chdir(&block)
-      Dir.chdir(path, &block)
-    end
+    # def chdir(&block)
+    #   Dir.chdir(path, &block)
+    # end
   end
 end
 
