@@ -23,7 +23,7 @@ module Space
     end
 
     def git_ahead
-      " #{git.ahead} commits ahead".ansi(:cyan)
+      " #{git.ahead} commit#{'s' if git.ahead > 1} ahead".ansi(:yellow)
     end
 
     def bundler_status

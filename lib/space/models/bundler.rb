@@ -32,8 +32,9 @@ module Space
 
     def deps
       result(:list, name: name).split("\n").map do |dep|
-        matches = dep.strip.match /^\* (?<name>[\S]+) \(\d+\.\d+\.\d+(?: (?<ref>.+))?\)/
-        Dependency.new(repos, matches[:name], matches[:ref])
+        if matches = dep.strip.match(/^\* (?<name>[\S]+) \(\d+\.\d+\.\d+(?: (?<ref>.+))?\)/)
+          Dependency.new(repos, matches[:name], matches[:ref])
+        end
       end.compact
     end
   end

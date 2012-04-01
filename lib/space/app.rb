@@ -20,21 +20,25 @@ module Space
     def run
       screen.render
       loop do
-        line = readline('', true)
+        line = readline(prompt, true)
         break if line.nil?
         handle(line) unless line.empty?
       end
     end
 
     def update
-      screen.render
+      screen.render(prompt: prompt)
     end
 
     private
 
       def handle(line)
         Action.run(self, line)
-        screen.render
+        screen.render # (prompt: prompt)
+      end
+
+      def prompt
+        "#{repos.scoped? ? repos.scope.map { |r| r.name }.join(', ') : name} > "
       end
   end
 end

@@ -8,7 +8,9 @@ module Space
 
     class << self
       def run(app, line)
-        new(app, *Parser.new(app.repos.names).parse(line)).run
+        ::Bundler.with_clean_env do
+          new(app, *Parser.new(app.repos.names).parse(line)).run
+        end
       end
     end
 

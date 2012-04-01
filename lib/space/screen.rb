@@ -8,15 +8,15 @@ module Space
       @repos   = repos
     end
 
-    def render
+    def render(options = {})
       Watcher.ignore do
         system 'clear'
         puts render_project
         repos.scope.self_and_dependencies.each do |repo|
           puts render_repo(repo)
         end
-        print render_prompt
       end
+      print options[:prompt].to_s
     end
 
     private
@@ -27,10 +27,6 @@ module Space
 
       def render_repo(repo)
         View.new.render(:repo, repos: repos, repo: repo, git: repo.git, bundler: repo.bundler)
-      end
-
-      def render_prompt
-        "#{repos.scoped? ? repos.scope.map { |r| r.name }.join(', ') : name} > "
       end
   end
 end

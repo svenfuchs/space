@@ -4,7 +4,7 @@ module Space
 
     def initialize(name, repos, number, path)
       @repos   = repos
-      @number  = number
+      @number  = number # TODO optionally find the tmux window number from `tmux list-windows`
       @path    = File.expand_path(path)
       @git     = Git.new(path)
       @bundler = Bundler.new(name, repos, path)

@@ -7,7 +7,7 @@ module Space
     COMMANDS = {
       status: 'git status',
       branch: 'git branch --no-color',
-      commit: 'git log -1 head'
+      commit: 'git log -1 HEAD'
     }
 
     WATCH = [
