@@ -1,12 +1,18 @@
+require 'observer'
+
 module Space
-  class Bundle
-    include Commands
+  class Bundler
+    include Watcher, Observable, Commands
 
     COMMANDS = {
       check:  'bundle check',
       list:   'bundle list | grep %<name>s',
-      config: 'bundle config'
     }
+
+    WATCH = [
+      'Gemfile',
+      'Gemfile.lock'
+    ]
 
     attr_reader :name, :repos
 
@@ -29,20 +35,6 @@ module Space
         matches = dep.strip.match /^\* (?<name>[\S]+) \(\d+\.\d+\.\d+(?: (?<ref>.+))?\)/
         Dependency.new(repos, matches[:name], matches[:ref])
       end.compact
-    end
-
-    def local_repos
-      config.keys.map do |key|
-        key =~ /^local\.(.+)$/ && $1
-      end.compact
-    end
-
-    def config
-      lines  = result(:config).split("\n")[2..-1]
-      values = lines.map_slice(3) do |name, value, _|
-        [name, value =~ /: "(.*)"/ && $1]
-      end
-      Hash[*values.compact.flatten]
     end
   end
 end

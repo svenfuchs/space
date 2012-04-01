@@ -43,5 +43,9 @@ module Space
     def select_by_names(names)
       Scope.new(self, all.select { |repo| names.include?(repo.name) })
     end
+
+    def add_observer(observer)
+      all.each { |repo| repo.add_observer(observer) }
+    end
   end
 end

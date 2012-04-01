@@ -1,11 +1,8 @@
-# On branch master
-# # Your branch is ahead of 'origin/master' by 1 commit.
-# #
-# nothing to commit (working directory clean)
+require 'observer'
 
 module Space
   class Git
-    include Commands
+    include Watcher, Observable, Commands
 
     COMMANDS = {
       status: 'git status',
@@ -13,16 +10,22 @@ module Space
       commit: 'git log -1 head'
     }
 
-    def initialize(path)
-      super(path)
-    end
+    WATCH = [
+      '.'
+    ]
 
     def branch
       result(:branch) =~ /^\* (.+)/ && $1.strip
+      # ignore_updates('.git/') do
+      #   result(:branch) =~ /^\\* (.+)/ && $1.strip
+      # end
     end
 
     def commit
       result(:commit) =~ /^commit (\S{7})/ && $1
+      # ignore_updates('.git/') do
+      #   result(:commit) =~ /^commit (\\S{7})/ && $1
+      # end
     end
 
     def status
@@ -35,6 +38,9 @@ module Space
 
     def ahead
       result(:status) =~ /Your branch is ahead of .* by (\d+) commits?\./ ? $1.to_i : 0
+      # ignore_updates('.git/') do
+      #   result(:status) =~ /Your branch is ahead of .* by (\\d+) commits?\\./ ? $1.to_i : 0
+      # end
     end
 
     def dirty?
@@ -43,6 +49,16 @@ module Space
 
     def clean?
       result(:status).include?('nothing to commit (working directory clean)')
+      # ignore_updates('.git') do
+      #   result(:status).include?('nothing to commit (working directory clean)')
+      # end
     end
+
+    # private
+
+    #   def update(paths)
+    #     p paths
+    #     super
+    #   end
   end
 end

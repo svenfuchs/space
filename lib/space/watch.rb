@@ -2,22 +2,32 @@ require 'rb-fsevent'
 
 module Space
   class Watch
+    LATENCY = 0
+    NO_DEFER = FALSE
+
     attr_reader :path, :callback
 
     def initialize(path, &block)
-      @path  = path
+      @path = File.expand_path(path)
       @callback = block
-      run
+      self
     end
 
     def run
-      Thread.new { watch }
+      Thread.new do
+        watch
+      end
     end
 
     private
 
       def watch
-        fsevent.watch(path, file: file?, &callback)
+        fsevent.watch(path, file: file?, latency: LATENCY, no_defer: NO_DEFER) do |paths|
+          fsevent.stop
+          callback.call(paths)
+          # sleep(1)
+          fsevent.run
+        end
         fsevent.run
       rescue Exception => e
         puts e.message, e.backtrace

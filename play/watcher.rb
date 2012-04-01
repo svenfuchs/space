@@ -3,11 +3,12 @@ $: << 'lib'
 
 require 'space/watch'
 
-Space::Watch.new(__FILE__) do |paths|
+watch = Space::Watch.new(__FILE__) do |paths|
   p paths
 end
+watch.run
 
-Space::Watch.new('.') do |paths|
-  p paths
-end
+# Space::Watch.new('.') do |paths|
+#   p paths
+# end
 sleep

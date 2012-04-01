@@ -1,36 +1,47 @@
-require 'rb-fsevent'
-
 module Space
   module Watcher
-    def self.included(base)
-      base.class_eval do
-        class << self
-          attr_reader :paths
-
-          def watch(&block)
-            @paths = block
-          end
+    class << self
+      def ignore
+        @ignore = true
+        yield.tap do
+          @ignore= false
         end
+      end
+
+      def ignore?
+        !!@ignore
       end
     end
 
-    def initialize(*)
+    def initialize(*args)
       super
-      watch!
+      watch
     end
 
-    def watch_files(paths)
-      paths.each do |path|
-        event = FSEvent.new
-        event.watch(path, file: File.file?(path)) do |paths|
-          puts "Detected change inside: #{paths.inspect}"
+    private
+
+      def watch
+        targets.each do |path|
+          Watch.new(path, &method(:update)).run
         end
-        event.run
       end
-    end
 
-    def paths
-      instance_eval(&self.class.paths)
-    end
+      def ignore_updates(*paths, &block)
+        Watcher.ignore_updates(*paths, &block)
+      end
+
+      def update(paths)
+        unless Watcher.ignore?
+          reset
+          changed
+          notify_observers
+        end
+      end
+
+      def targets
+        Array(self.class::WATCH).map do |path|
+          "#{self.path}/#{path}"
+        end
+      end
   end
 end

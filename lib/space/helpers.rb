@@ -26,21 +26,20 @@ module Space
       " #{git.ahead} commits ahead".ansi(:cyan)
     end
 
-    def bundle_status
-      "Bundle: #{format_boolean(bundle.clean?)}"
+    def bundler_status
+      "Bundle: #{format_boolean(bundler.clean?)}"
     end
 
-    def bundle_info
-      bundle.info.ansi(:red) unless bundle.clean?
+    def bundler_info
+      bundler.info.ansi(:red) unless bundler.clean?
     end
 
-    def bundle_deps
-      bundle.deps.map { |dep| "• #{dep.ref} #{format_boolean(dep.fresh?)} #{dep.name}" }.join("\n")
+    def bundler_deps
+      bundler.deps.map { |dep| "• #{dep.ref} #{format_boolean(dep.fresh?)} #{dep.name}" }.join("\n")
     end
 
-    def bundle_local
-      repos = bundle.local_repos
-      "\nLocal: #{repos.join(', ')}\n" unless repos.empty?
+    def bundler_local
+      "\nLocal: #{project.local_repos.join(', ')}\n" unless project.local_repos.empty?
     end
 
     def format_boolean(value)

@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 $: << 'lib'
+require 'bundler/setup'
 require 'space'
 
 abort 'Need to specify a project name' if ARGV.empty?
-Space::App.run(ARGV[0])
+Space::App.new(ARGV[0]).run

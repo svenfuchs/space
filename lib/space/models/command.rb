@@ -10,19 +10,29 @@ module Space
     end
 
     def result(args = {})
-      @result ||= chdir { strip_ansi(`#{command % args}`) }
+      @result ||= strip_ansi(run(args))
     end
 
     def reset
       @result = nil
     end
 
-    def chdir(&block)
-      Dir.chdir(path, &block)
-    end
+    private
 
-    def strip_ansi(string)
-      string.gsub(ANSI::Code::PATTERN, '')
-    end
+      def run(args)
+        ::Bundler.with_clean_env do
+          chdir do
+            `#{command % args}`
+          end
+        end
+      end
+
+      def chdir(&block)
+        Dir.chdir(path, &block)
+      end
+
+      def strip_ansi(string)
+        string.gsub(ANSI::Code::PATTERN, '')
+      end
   end
 end
