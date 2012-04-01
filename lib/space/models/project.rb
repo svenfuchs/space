@@ -12,17 +12,18 @@ module Space
       '.bundle/config'
     ]
 
-    attr_reader :repos
+    attr_reader :app, :name
 
-    def initialize(repos)
-      @repos = repos
+    def initialize(app, name)
+      @app = app
+      @name = name
       super('.')
     end
 
     def local_repos
       config.keys.map do |key|
         key =~ /^local\.(.+)$/
-        $1 if repos.names.include?($1)
+        $1 if app.repos.names.include?($1)
       end.compact
     end
 
@@ -32,6 +33,19 @@ module Space
         [name, value =~ /: "(.*)"/ && $1]
       end
       Hash[*values.compact.flatten]
+    end
+
+    def windows
+      @windows ||= Tmux.windows || app.repos.names
+    end
+
+    def number(name)
+      if number = windows.index(name)
+        number + 1
+      else
+        windows << name
+        number(name)
+      end
     end
   end
 end

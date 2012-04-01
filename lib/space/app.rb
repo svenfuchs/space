@@ -9,8 +9,8 @@ module Space
     def initialize(name)
       @name    = name
       @config  = Config.load(name)
-      @repos   = Repos.new(name, config.paths)
-      @project = Project.new(repos)
+      @project = Project.new(self, name)
+      @repos   = Repos.new(project, config.paths)
       @screen  = Screen.new(name, project, repos)
 
       project.add_observer(self)

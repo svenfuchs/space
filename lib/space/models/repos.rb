@@ -13,15 +13,15 @@ module Space
       end
     end
 
-    attr_accessor :name, :paths, :scope
+    attr_accessor :project, :paths, :scope
 
-    def initialize(name, paths)
-      @name = name
+    def initialize(project, paths)
+      @project = project
       @paths = paths
     end
 
     def all
-      @all ||= Scope.new(self, paths.map_with_index { |path, ix| Repo.new(name, self, ix + 1, path) })
+      @all ||= Scope.new(self, paths.map { |path| Repo.new(project, self, path) })
     end
 
     def scope

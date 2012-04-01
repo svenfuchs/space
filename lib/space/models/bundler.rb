@@ -14,12 +14,16 @@ module Space
       'Gemfile.lock'
     ]
 
-    attr_reader :name, :repos
+    attr_reader :project, :repos
 
-    def initialize(name, repos, path)
-      @name = name
+    def initialize(project, repos, path)
+      @project = project
       @repos = repos
       super(path)
+    end
+
+    def name
+      project.name
     end
 
     def clean?

@@ -12,7 +12,7 @@ module Space
     end
 
     def local_repos
-      "\n#{format_list(project.local_repos, :width => terminal_width, :prefix => 'Local: ')}\n" unless project.local_repos.empty?
+      "\n#{format_list(project.local_repos, :width => terminal_width - 2, :prefix => 'Local: ')}\n" unless project.local_repos.empty?
     end
 
     def tableize(string)
@@ -60,9 +60,8 @@ module Space
       if result.size <= width
         result
       else
-        result = wrap_list(list, width)
-        result = result.map { |line| i(line) }
-        result[0] = "#{options[:prefix]}#{result[0].strip}"
+        result = wrap_list(list, width).map { |line| i(line) }
+        result.unshift(options[:prefix])
         result.join("\n")
       end
     end
@@ -76,10 +75,10 @@ module Space
       result.map(&:strip)
     end
 
-    def i(string)
+    def i(string, width = 2)
       lines = string.split("\n")
       lines = lines.map { |line| line.wrap(80).split("\n") }.flatten
-      lines = lines.map { |line| "  #{line}" }
+      lines = lines.map { |line| [' ' * width, line].join }
       lines.join("\n")
     end
   end

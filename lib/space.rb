@@ -10,6 +10,7 @@ module Space
   autoload :Screen,     'space/screen'
   autoload :System,     'space/system'
   autoload :View,       'space/view'
+  autoload :Tmux,       'space/tmux'
   autoload :Watch,      'space/watch'
 
   autoload :Bundler,    'space/models/bundler'

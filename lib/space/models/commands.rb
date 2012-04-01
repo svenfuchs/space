@@ -11,6 +11,7 @@ module Space
         print "\e[2J\e[0;0H" # clear screen, move cursor to home
       end
     end
+
     attr_reader :path
 
     def initialize(path)

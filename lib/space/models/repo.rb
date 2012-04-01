@@ -1,17 +1,21 @@
 module Space
   class Repo
-    attr_reader :repos, :number, :path, :git, :bundler
+    attr_reader :project, :repos, :path, :git, :bundler
 
-    def initialize(name, repos, number, path)
+    def initialize(project, repos, path)
+      @project = project
       @repos   = repos
-      @number  = number # TODO optionally find the tmux window number from `tmux list-windows`
       @path    = File.expand_path(path)
       @git     = Git.new(path)
-      @bundler = Bundler.new(name, repos, path)
+      @bundler = Bundler.new(project, repos, path)
     end
 
     def name
       @name ||= File.basename(path)
+    end
+
+    def number
+      @number ||= project.number(name)
     end
 
     def ref
