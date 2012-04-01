@@ -6,7 +6,7 @@ module Space
 
     COMMANDS = {
       check:  'bundle check',
-      list:   'bundle list | grep %<name>s',
+      list:   ->(command) { "bundle list | grep #{command.name}" }
     }
 
     WATCH = [
@@ -31,7 +31,7 @@ module Space
     end
 
     def deps
-      result(:list, name: name).split("\n").map do |dep|
+      result(:list).split("\n").map do |dep|
         if matches = dep.strip.match(/^\* (?<name>[\S]+) \(\d+\.\d+\.\d+(?: (?<ref>.+))?\)/)
           Dependency.new(repos, matches[:name], matches[:ref])
         end

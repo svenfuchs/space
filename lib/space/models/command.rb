@@ -2,15 +2,15 @@ require 'ansi/code'
 
 module Space
   class Command
-    attr_reader :path, :command
+    attr_reader :context, :command
 
-    def initialize(path, command)
-      @path = File.expand_path(path)
+    def initialize(context, command)
+      @context = context
       @command = command
     end
 
-    def result(args = {})
-      @result ||= strip_ansi(run(args))
+    def result
+      @result ||= strip_ansi(run)
     end
 
     def reset
@@ -19,16 +19,16 @@ module Space
 
     private
 
-      def run(args)
+      def run
         ::Bundler.with_clean_env do
           chdir do
-            `#{command % args}`
+            `#{command.is_a?(Proc) ? context.instance_eval(&command) : command}`
           end
         end
       end
 
       def chdir(&block)
-        Dir.chdir(path, &block)
+        Dir.chdir(context.path, &block)
       end
 
       def strip_ansi(string)

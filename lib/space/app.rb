@@ -18,7 +18,7 @@ module Space
     end
 
     def run
-      screen.render
+      render
       loop do
         line = readline(prompt, true)
         break if line.nil?
@@ -27,14 +27,22 @@ module Space
     end
 
     def update
-      screen.render(prompt: prompt)
+      render(prompt: prompt)
     end
 
     private
 
+      def render(options = {})
+        Watcher.ignore do
+          print "\e[2J\e[0;0H" # clear screen, move cursor to home
+          Commands.preload
+          screen.render(options)
+        end
+      end
+
       def handle(line)
         Action.run(self, line)
-        screen.render # (prompt: prompt)
+        render
       end
 
       def prompt

@@ -1,23 +1,42 @@
 module Space
   module Commands
+    class << self
+      def all
+        @all ||= []
+      end
+
+      def preload
+        print 'gathering data '
+        all.map(&:preload)
+        print "\e[2J\e[0;0H" # clear screen, move cursor to home
+      end
+    end
     attr_reader :path
 
     def initialize(path)
-      @path = path
+      @path = File.expand_path(path)
+      Commands.all << self
     end
 
-    def result(command, args = {})
-      commands[command].result(args)
+    def result(command)
+      commands[command].result
     end
 
     def commands
       @commands ||= Hash[*self.class::COMMANDS.map do |key, cmd|
-        [key, Command.new(path, cmd)]
+        [key, Command.new(self, cmd)]
       end.flatten]
     end
 
     def reset
       commands.each { |key, command| command.reset }
+    end
+
+    def preload
+      commands.each do |key, command|
+        print '.'
+        command.result
+      end
     end
   end
 end

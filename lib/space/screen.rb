@@ -9,12 +9,9 @@ module Space
     end
 
     def render(options = {})
-      Watcher.ignore do
-        system 'clear'
-        puts render_project
-        repos.scope.self_and_dependencies.each do |repo|
-          puts render_repo(repo)
-        end
+      puts render_project
+      repos.scope.self_and_dependencies.each do |repo|
+        puts render_repo(repo)
       end
       print options[:prompt].to_s
     end
