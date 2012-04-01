@@ -6,9 +6,7 @@ module Space
       end
 
       def preload
-        print 'gathering data '
         all.map(&:preload)
-        print "\e[2J\e[0;0H" # clear screen, move cursor to home
       end
     end
 

@@ -7,18 +7,18 @@ module Space
     include Builtin, Development
 
     class << self
-      def run(app, line)
+      def run(project, line)
         ::Bundler.with_clean_env do
-          new(app, *Parser.new(app.repos.names).parse(line)).run
+          new(project, *Parser.new(project.names).parse(line)).run
         end
       end
     end
 
-    attr_reader :app, :repos, :command, :args
+    attr_reader :project, :repos, :command, :args
 
-    def initialize(app, repos, command, *args)
-      @app     = app
-      @repos   = app.repos.select_by_names(repos) if repos
+    def initialize(project, repos, command, *args)
+      @project = project
+      @repos   = project.repos.select_by_names(repos) if repos
       @command = normalize(command)
       @args    = args
     end
@@ -34,7 +34,7 @@ module Space
     private
 
       def run_scoped(refreshing = false)
-        (repos || app.repos.scope).each { |repo| yield repo }
+        (repos || project.repos.scope).each { |repo| yield repo }
         confirm unless refreshing
       end
 

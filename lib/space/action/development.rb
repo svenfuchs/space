@@ -12,7 +12,7 @@ module Space
         run_scoped do |repo|
           system "bundle config --delete local.#{repo.name}"
         end
-        app.project.reset
+        project.reset
       end
 
       def install

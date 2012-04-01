@@ -4,17 +4,15 @@ module Space
   class App
     include Readline
 
-    attr_reader :name, :config, :project, :repos, :screen
+    attr_reader :name, :config, :project, :screen
 
     def initialize(name)
       @name    = name
       @config  = Config.load(name)
-      @project = Project.new(self, name)
-      @repos   = Repos.new(project, config.paths)
-      @screen  = Screen.new(name, project, repos)
+      @project = Project.new(name, config)
+      @screen  = Screen.new(name, config, project, project.repos)
 
       project.add_observer(self)
-      repos.add_observer(self)
     end
 
     def run
@@ -34,19 +32,20 @@ module Space
 
       def render(options = {})
         Watcher.ignore do
-          print "\e[2J\e[0;0H" # clear screen, move cursor to home
+          screen.clear
+          print 'gathering data '
           Commands.preload
           screen.render(options)
         end
       end
 
       def handle(line)
-        Action.run(self, line)
+        Action.run(project, line)
         render
       end
 
       def prompt
-        "#{repos.scoped? ? repos.scope.map { |r| r.name }.join(', ') : name} > "
+        "#{project.repos.scoped? ? project.repos.scope.map { |r| r.name }.join(', ') : name} > "
       end
   end
 end

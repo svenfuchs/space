@@ -2,50 +2,37 @@ require 'observer'
 
 module Space
   class Project
-    include Watcher, Observable, Commands
+    attr_reader :name, :repos, :bundler
 
-    COMMANDS = {
-      config: 'bundle config'
-    }
-
-    WATCH = [
-      '.bundle/config'
-    ]
-
-    attr_reader :app, :name
-
-    def initialize(app, name)
-      @app = app
+    def initialize(name, config)
       @name = name
-      super('.')
+      @repos = Repos.new(self, config.paths)
+      @bundler = Bundler.new
+    end
+
+    def names
+      @names ||= Tmux.windows || repos.names
     end
 
     def local_repos
-      config.keys.map do |key|
+      bundler.config.keys.map do |key|
         key =~ /^local\.(.+)$/
-        $1 if app.repos.names.include?($1)
+        $1 if repos.names.include?($1)
       end.compact
     end
 
-    def config
-      lines  = result(:config).split("\n")[2..-1]
-      values = lines.map_slice(3) do |name, value, _|
-        [name, value =~ /: "(.*)"/ && $1]
-      end
-      Hash[*values.compact.flatten]
-    end
-
-    def windows
-      @windows ||= Tmux.windows || app.repos.names
-    end
-
     def number(name)
-      if number = windows.index(name)
+      if number = names.index(name)
         number + 1
       else
-        windows << name
+        names << name
         number(name)
       end
+    end
+
+    def add_observer(observer)
+      repos.add_observer(observer)
+      bundler.add_observer(observer)
     end
   end
 end

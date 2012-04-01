@@ -2,18 +2,18 @@ module Space
   class Action
     module Builtin
       def refresh
-        app.project.reset
+        project.bundler.reset
         run_scoped(true) do |repo|
           repo.reset
         end
       end
 
       def scope
-        app.repos.scope = repos
+        project.repos.scope = repos
       end
 
       def unscope
-        app.repos.scope = nil
+        project.repos.scope = nil
       end
 
       def execute(cmd)

@@ -1,13 +1,12 @@
 module Space
   class Repo
-    attr_reader :project, :repos, :path, :git, :bundler
+    attr_reader :project, :path, :git, :bundle
 
-    def initialize(project, repos, path)
+    def initialize(project, path)
       @project = project
-      @repos   = repos
       @path    = File.expand_path(path)
       @git     = Git.new(path)
-      @bundler = Bundler.new(project, repos, path)
+      @bundle  = Bundle.new(project, path)
     end
 
     def name
@@ -23,12 +22,12 @@ module Space
     end
 
     def dependencies
-      repos.select_by_names(bundler.deps.map(&:name))
+      project.repos.select_by_names(bundle.deps.map(&:name))
     end
 
     def reset
       git.reset
-      bundler.reset
+      bundle.reset
     end
 
     def execute(cmd)
@@ -44,7 +43,7 @@ module Space
 
     def add_observer(observer)
       git.add_observer(observer)
-      bundler.add_observer(observer)
+      bundle.add_observer(observer)
     end
   end
 end

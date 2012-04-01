@@ -14,6 +14,7 @@ module Space
   autoload :Watch,      'space/watch'
 
   autoload :Bundler,    'space/models/bundler'
+  autoload :Bundle,     'space/models/bundle'
   autoload :Commands,   'space/models/commands'
   autoload :Command,    'space/models/command'
   autoload :Dependency, 'space/models/dependency'
@@ -22,9 +23,4 @@ module Space
   autoload :Repos,      'space/models/repos'
   autoload :Repo,       'space/models/repo'
   autoload :Watcher,    'space/models/watcher'
-
-  TEMPLATES = {
-    project: 'lib/space/templates/project.erb',
-    repo:    'lib/space/templates/repository.erb'
-  }
 end

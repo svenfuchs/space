@@ -12,7 +12,7 @@ module Space
     end
 
     def local_repos
-      "\n#{format_list(project.local_repos, :width => terminal_width - 2, :prefix => 'Local: ')}\n" unless project.local_repos.empty?
+      format_list(project.local_repos, :width => terminal_width - 2, :prefix => 'Local: ') + "\n" unless project.local_repos.empty?
     end
 
     def tableize(string)
@@ -38,16 +38,16 @@ module Space
       " #{git.ahead} commit#{'s' if git.ahead > 1} ahead".ansi(:yellow)
     end
 
-    def bundler_status
-      "Bundle: #{format_boolean(bundler.clean?)}"
+    def bundle_status
+      "Bundle: #{format_boolean(bundle.clean?)}"
     end
 
-    def bundler_info
-      bundler.info.ansi(:red) unless bundler.clean?
+    def bundle_info
+      bundle.info.ansi(:red) unless bundle.clean?
     end
 
-    def bundler_deps
-      bundler.deps.map { |dep| "• #{dep.ref} #{format_boolean(dep.fresh?)} #{dep.name}" }.join("\n")
+    def bundle_deps
+      bundle.deps.map { |dep| "• #{dep.ref} #{format_boolean(dep.fresh?)} #{dep.name}" }.join("\n")
     end
 
     def format_boolean(value)

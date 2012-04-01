@@ -21,7 +21,7 @@ module Space
     end
 
     def all
-      @all ||= Scope.new(self, paths.map { |path| Repo.new(project, self, path) })
+      @all ||= Scope.new(self, paths.map { |path| Repo.new(project, path) })
     end
 
     def scope
