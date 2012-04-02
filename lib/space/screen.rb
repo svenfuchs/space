@@ -16,7 +16,6 @@ module Space
 
     def render(options = {})
       clear
-      puts render_config
       repos.scope.self_and_dependencies.each do |repo|
         puts render_repo(repo)
       end
@@ -27,10 +26,6 @@ module Space
 
       def render_project
          view.render(:project, name: name, project: project)
-      end
-
-      def render_config
-         view.render(:config, project: project)
       end
 
       def render_repo(repo)

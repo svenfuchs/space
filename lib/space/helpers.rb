@@ -1,18 +1,11 @@
 # encoding: UTF-8
 require 'ansi/core'
-require 'ansi/terminal'
 require 'core_ext/string'
 
 module Space
   module Helpers
-    include ANSI::Terminal
-
     def project_title
       "Project: #{name}".ansi(:bold)
-    end
-
-    def local_repos
-      format_list(project.local_repos, :width => terminal_width - 2, :prefix => 'Local: ') + "\n" unless project.local_repos.empty?
     end
 
     def tableize(string)
@@ -20,10 +13,20 @@ module Space
       project.local_repos.join(', ')
     end
 
-    def repo_title
-      title = "#{repo.name.ansi(:bold)} [#{git.branch}, #{git.commit}] [#{repo.number}]"
-      title += " *" if repo_selected?
-      title
+    def repo_name
+      repo.name.ansi(:bold)
+    end
+
+    def repo_status
+      [repo_local, git.branch, git.commit].compact.join(', ')
+    end
+
+    def repo_local
+      'L'.ansi(:bold, :red) if repo_local?
+    end
+
+    def repo_local?
+      project.local_repos.include?(repo.name)
     end
 
     def repo_selected?
@@ -52,27 +55,6 @@ module Space
 
     def format_boolean(value)
       value ? '✔'.ansi(:green, :bold) : '⚡'.ansi(:red, :bold)
-    end
-
-    def format_list(list, options = {})
-      width = options[:width] || terminal_width
-      result = "#{options[:prefix]}#{list.join(', ')}"
-      if result.size <= width
-        result
-      else
-        result = wrap_list(list, width).map { |line| i(line) }
-        result.unshift(options[:prefix])
-        result.join("\n")
-      end
-    end
-
-    def wrap_list(list, width)
-      result = ['']
-      list.each do |item|
-        result << '' if (result.last + item).size + 1 > width
-        result.last << "#{item}#{', ' unless list.last == item}"
-      end
-      result.map(&:strip)
     end
 
     def i(string, width = 2)
