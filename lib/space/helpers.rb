@@ -1,6 +1,6 @@
 # encoding: UTF-8
 require 'ansi/core'
-require 'core_ext/string'
+require 'core_ext/string/wrap'
 
 module Space
   module Helpers
@@ -65,3 +65,4 @@ module Space
     end
   end
 end
+

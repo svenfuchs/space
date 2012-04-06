@@ -5,16 +5,16 @@ module Space
         new(YAML.load(File.read(path(name))))
       end
 
-      def path(name)
-        path = paths(name).detect { |path| File.exists?(path) }
-        path || abort("Could not find #{name}.yml at either of ~/.space/#{name}.yml and ./.#{name}.yml")
-      end
+      private
 
-      def paths(name)
-        %W(~/.space/#{name}.yml ./.#{name}.yml).map do |path|
-          File.expand_path(path)
+        def path(name)
+          path = paths(name).detect { |path| File.exists?(path) }
+          path || raise("Could not find #{name}.yml at either of ~/.space/#{name}.yml and ./.space/#{name}.yml")
         end
-      end
+
+        def paths(name)
+          %w(. ~).map { |path| File.expand_path("#{path}/.space/#{name}.yml") }
+        end
     end
 
     define :template_dir => File.expand_path('../templates', __FILE__)

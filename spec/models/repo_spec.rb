@@ -1,34 +1,13 @@
 require 'spec_helper'
 
-describe Repo do
+describe Space::Models::Repo do
+  let(:project) { stub('project', repos: stub('repos')) }
+  let(:repo)    { Space::Models::Repo.new(project, './travis-ci') }
+
   describe 'name' do
-    it 'returns the basename of the repository directory' do
+    it 'returns the basename of its directory' do
+      repo.name.should == 'travis-ci'
     end
-  end
-
-  describe 'ref' do
-    it 'returns the git commit' do
-
-    end
-  end
-
-  describe 'current?' do
-    it 'returns true when the app scope is the current repo'
-    it 'returns false when the app scope is not the current repo'
-  end
-
-  describe 'dependent_repos' do
-    it 'returns repos that this repo depends on'
-  end
-
-  describe 'reset' do
-    it 'resets its git'
-    it 'resets its bundle'
-  end
-
-  describe 'execute' do
-    it 'changes to the repository directory'
-    it 'runds the given command'
   end
 end
 

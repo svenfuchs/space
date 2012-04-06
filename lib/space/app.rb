@@ -2,50 +2,50 @@ require 'readline'
 
 module Space
   class App
+    autoload :Command, 'space/app/command'
+    autoload :Handler, 'space/app/handler'
+    autoload :Parser,  'space/app/parser'
+
     include Readline
 
-    attr_reader :name, :config, :project, :screen
+    attr_reader :name, :project, :screen
 
     def initialize(name)
       @name    = name
-      @config  = Config.load(name)
-      @project = Project.new(name, config)
-      @screen  = Screen.new(name, config, project, project.repos)
+      @project = Models::Project.new(name)
+      @screen  = Screen.new(project)
 
-      project.add_observer(self)
+      project.subscribe(screen)
     end
 
     def run
-      render
-      loop do
-        line = readline(prompt, true)
-        break if line.nil?
-        handle(line) unless line.empty?
-      end
-    end
-
-    def update
-      render(prompt: prompt)
+      refresh
+      screen.display(:dashboard)
+      prompt
     end
 
     private
 
-      def render(options = {})
-        Watcher.ignore do
-          screen.clear
-          print 'gathering data '
-          Commands.preload
-          screen.render(options)
+      def refresh
+        screen.display(:progress)
+        Shell::Watcher.ignore do
+          project.refresh
+        end
+      end
+
+      def prompt
+        loop do
+          line = readline(screen.prompt, true)
+          break if line.nil?
+          handle(line) unless line.empty?
         end
       end
 
       def handle(line)
-        Action.run(project, line)
-        render
-      end
-
-      def prompt
-        "#{project.repos.scoped? ? project.repos.scope.map { |r| r.name }.join(', ') : name} > "
+        screen.display(:progress)
+        Handler.new(project).run(line)
+        screen.display(:dashboard)
       end
   end
 end
+

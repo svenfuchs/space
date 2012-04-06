@@ -1,35 +1,31 @@
 module Space
   class Screen
-    attr_reader :name, :project, :repos, :view
+    autoload :Progress,  'space/screen/progress'
+    autoload :Dashboard, 'space/screen/dashboard'
+    autoload :View,      'space/screen/view'
 
-    def initialize(name, config, project, repos)
-      @name    = name
+    attr_reader :project, :current
+
+    def initialize(project)
       @project = project
-      @repos   = repos
-      @view    = View.new(config.template_dir)
     end
 
-    def clear
-      print "\e[2J\e[0;0H" # clear screen, move cursor to home
-      puts render_project
+    def prompt
+      "#{project.repos.scoped? ? project.repos.scope.map { |r| r.name }.join(', ') : project.name} > "
     end
 
-    def render(options = {})
-      clear
-      repos.scope.self_and_dependencies.each do |repo|
-        puts render_repo(repo)
-      end
-      print options[:prompt].to_s
+    def display(screen)
+      @current = create(screen).tap { |screen| screen.render }
+    end
+
+    def notify(event, data)
+      current.notify(event, data)
     end
 
     private
 
-      def render_project
-         view.render(:project, name: name, project: project)
-      end
-
-      def render_repo(repo)
-        view.render(:repo, repos: repos, repo: repo, git: repo.git, bundle: repo.bundle)
+      def create(screen)
+        self.class.const_get(screen.to_s.capitalize).new(project)
       end
   end
 end
