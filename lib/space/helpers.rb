@@ -18,7 +18,7 @@ module Space
     end
 
     def repo_status
-      [repo_local, git.branch, git.commit].compact.join(', ')
+      [git.branch, git.commit, repo_local].compact.join(', ')
     end
 
     def repo_local

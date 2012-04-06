@@ -5,25 +5,29 @@ module Space
         run_scoped do |repo|
           system "bundle config --global local.#{repo.name} #{repo.path}"
         end
-        app.project.reset
+        project.bundler.reset
       end
 
       def remote
         run_scoped do |repo|
           system "bundle config --delete local.#{repo.name}"
         end
-        project.reset
+        project.bundler.reset
       end
 
       def install
-        # bundle install
-        # refresh
+        run_scoped do |repo|
+          repo.execute 'bundle install'
+          repo.reset
+        end
       end
 
       def update
-        # bundle update all outdated deps
-        # git commit if successful
-        # refresh
+        run_scoped do |repo|
+          repo.execute 'bundle update'
+          repo.execute 'git commit -am "bump dependencies"'
+          repo.reset
+        end
       end
 
       def checkout

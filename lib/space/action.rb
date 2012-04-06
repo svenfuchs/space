@@ -39,8 +39,10 @@ module Space
       end
 
       def system(cmd)
-        puts cmd
-        super
+        ::Bundler.with_clean_env do
+          puts cmd
+          super
+        end
       end
 
       def confirm
