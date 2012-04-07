@@ -17,9 +17,11 @@ module Space
       end
 
       def run
-        puts "\nRUNNING #{command} in [#{context.path}]"
-        notifying do
-          @result = chain.call
+        Watcher.suspend do
+          puts "\nRUNNING #{command} in [#{context.path}]"
+          notifying do
+            @result = chain.call
+          end
         end
       end
 
@@ -28,7 +30,6 @@ module Space
         def notifying(&block)
           old = result
           yield.tap do |new|
-            puts "UP TO DATE? #{(old == new).inspect}"
             notify unless old == new
           end
         end

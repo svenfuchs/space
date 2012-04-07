@@ -2,15 +2,15 @@ module Space
   module Shell
     module Watcher
       class << self
-        def ignore
-          @ignore = true
+        def suspend
+          @suspended = true
           yield.tap do
-            @ignore= false
+            @suspended = false
           end
         end
 
-        def ignore?
-          !!@ignore
+        def suspended?
+          !!@suspended
         end
       end
 
@@ -26,12 +26,8 @@ module Space
           end
         end
 
-        def ignore_updates(*paths, &block)
-          Watcher.ignore_updates(*paths, &block)
-        end
-
         def trigger(paths)
-          refresh
+          refresh # unless Watcher.suspended?
         end
 
         def targets

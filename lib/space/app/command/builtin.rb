@@ -4,13 +4,13 @@ module Space
       class Execute < Command
         def run
           Bundler.with_clean_env do
-            Shell::Watcher.ignore do
-              in_scope do |repo|
+            in_scope do |repo|
+              repo.buffering do
                 puts
                 repo.execute(*args)
               end
-              confirm
             end
+            confirm
           end
         end
       end
@@ -18,12 +18,11 @@ module Space
       class Refresh < Command
         def run
           Bundler.with_clean_env do
-            Shell::Watcher.ignore do
-              project.bundler.refresh
-              in_scope do |repo|
-                repo.refresh
-              end
+            project.bundler.refresh
+            in_scope do |repo|
+              repo.refresh
             end
+            project.notify(:update)
           end
         end
       end

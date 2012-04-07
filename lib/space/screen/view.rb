@@ -13,13 +13,7 @@ module Space
 
       private
 
-        # TODO duplicate from screen
-        def prompt
-          "#{project.repos.scoped? ? project.repos.scope.map { |r| r.name }.join(', ') : project.name} > "
-        end
-
         def clear
-          return
           print "\e[2J\e[0;0H" # clear screen, move cursor to home
         end
 

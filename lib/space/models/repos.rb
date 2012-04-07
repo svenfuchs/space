@@ -1,6 +1,8 @@
 module Space
   module Models
     class Repos
+      include Events
+
       autoload :Collection, 'space/models/repos/collection'
 
       attr_accessor :project, :paths, :scope
@@ -16,6 +18,11 @@ module Space
 
       def names
         @names ||= all.map(&:name)
+      end
+
+      def scope=(scope)
+        @scope = scope
+        notify(:update, nil)
       end
 
       def scope
@@ -35,6 +42,7 @@ module Space
       end
 
       def subscribe(*args)
+        super
         all.each { |repo| repo.subscribe(*args) }
       end
     end

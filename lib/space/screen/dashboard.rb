@@ -1,16 +1,14 @@
 module Space
   class Screen
     class Dashboard < View
-      def render(options = {})
+      def render
         clear
         render_header
         render_repos
-        print options[:prompt].to_s
       end
 
-      def notify(event, data)
-        p "RENDER DASHBOARD"
-        render(prompt: prompt)
+      def notify(event)
+        render
       end
 
       private

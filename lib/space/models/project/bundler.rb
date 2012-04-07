@@ -8,7 +8,7 @@ module Space
 
         commands config: 'bundle config'
 
-        watch '.bundle/config'
+        watch '~/.bundle/config'
 
         attr_reader :project
 
@@ -23,6 +23,10 @@ module Space
             [name, value =~ /: "(.*)"/ && $1]
           end
           Hash[*values.compact.flatten]
+        end
+
+        def notify(*args)
+          super
         end
       end
     end

@@ -17,9 +17,6 @@ module Space
         @args    = args
       end
 
-      # ::Bundler.with_clean_env do
-      # end
-
       def run
         raise 'not implemented'
       end

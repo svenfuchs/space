@@ -18,7 +18,7 @@ describe Space::App do
   before :each do
     Space::Config.stubs(:load).returns(config)
     stub_commands
-    app.stubs(:prompt)
+    app.stubs(:cli_loop)
   end
 
   def stub_commands

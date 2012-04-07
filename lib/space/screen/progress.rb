@@ -6,7 +6,7 @@ module Space
         render_header
       end
 
-      def notify(event, data)
+      def notify(event)
         print '.'
       end
     end

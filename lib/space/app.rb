@@ -1,10 +1,17 @@
 require 'readline'
+require 'logger'
 
 module Space
   class App
     autoload :Command, 'space/app/command'
     autoload :Handler, 'space/app/handler'
     autoload :Parser,  'space/app/parser'
+
+    class << self
+      def logger
+        @logger ||= Logger.new('/tmp/space.log')
+      end
+    end
 
     include Readline
 
@@ -21,21 +28,19 @@ module Space
     def run
       refresh
       screen.display(:dashboard)
-      prompt
+      cli_loop
     end
 
     private
 
       def refresh
         screen.display(:progress)
-        Shell::Watcher.ignore do
-          project.refresh
-        end
+        project.refresh
       end
 
-      def prompt
+      def cli_loop
         loop do
-          line = readline(screen.prompt, true)
+          line = readline(prompt, true)
           break if line.nil?
           handle(line) unless line.empty?
         end
@@ -45,6 +50,10 @@ module Space
         screen.display(:progress)
         Handler.new(project).run(line)
         screen.display(:dashboard)
+      end
+
+      def prompt
+        "#{project.repos.scoped? ? project.repos.scope.map { |r| r.name }.join(', ') : project.name} > "
       end
   end
 end

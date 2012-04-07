@@ -3,25 +3,23 @@ module Space
     class Command
       class Local < Command
         def run
-          Shell::Watcher.ignore do
+          project.bundler.buffering do
             repos.each do |repo|
               system "bundle config --global local.#{repo.name} #{repo.path}"
             end
+            confirm
           end
-          confirm
-          project.bundler.refresh
         end
       end
 
       class Remote < Command
         def run
-          Shell::Watcher.ignore do
+          project.bundler.buffering do
             repos.each do |repo|
               system "bundle config --delete local.#{repo.name}"
             end
+            confirm
           end
-          confirm
-          project.bundler.refresh
         end
       end
 

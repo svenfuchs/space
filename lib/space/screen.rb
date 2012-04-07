@@ -4,22 +4,23 @@ module Space
     autoload :Dashboard, 'space/screen/dashboard'
     autoload :View,      'space/screen/view'
 
-    attr_reader :project, :current
+    attr_reader :project, :view
 
     def initialize(project)
       @project = project
     end
 
-    def prompt
-      "#{project.repos.scoped? ? project.repos.scope.map { |r| r.name }.join(', ') : project.name} > "
+    def display(name)
+      @view = create(name)
+      render
     end
 
-    def display(screen)
-      @current = create(screen).tap { |screen| screen.render }
+    def render
+      view.render
     end
 
-    def notify(event, data)
-      current.notify(event, data)
+    def notify(event)
+      view.notify(event)
     end
 
     private
