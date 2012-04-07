@@ -10,7 +10,7 @@ module Space
       end
 
       def watch(*paths)
-        paths.empty? ? @paths : @paths = paths
+        paths.empty? ? (@paths || []) : (@paths = paths)
       end
     end
 
