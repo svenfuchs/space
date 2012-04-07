@@ -27,12 +27,12 @@ module Space
         end
 
         def trigger(paths)
-          refresh # unless Watcher.suspended?
+          refresh unless Watcher.suspended?
         end
 
         def targets
           self.class.watch.map do |path|
-            "#{self.path}/#{path}"
+            path[0, 1] == '~' ? path : "#{self.path}/#{path}"
           end
         end
     end

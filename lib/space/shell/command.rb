@@ -18,7 +18,7 @@ module Space
 
       def run
         Watcher.suspend do
-          puts "\nRUNNING #{command} in [#{context.path}]"
+          App.logger.debug "RUNNING #{command} [#{context.path}]"
           notifying do
             @result = chain.call
           end

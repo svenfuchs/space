@@ -17,6 +17,7 @@ module Space
 
       def run
         Thread.new do
+          App.logger.debug("WATCHING #{path}")
           watch
         end
       end
@@ -25,6 +26,7 @@ module Space
 
         def watch
           fsevent.watch(path, file: file?, latency: LATENCY, no_defer: NO_DEFER) do |paths|
+            App.logger.debug("WATCH triggered: #{paths.inspect}")
             fsevent.stop
             mutex.synchronize do
               callback.call(paths)

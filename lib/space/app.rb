@@ -1,15 +1,15 @@
 require 'readline'
-require 'logger'
 
 module Space
   class App
     autoload :Command, 'space/app/command'
     autoload :Handler, 'space/app/handler'
+    autoload :Logger,  'space/app/logger'
     autoload :Parser,  'space/app/parser'
 
     class << self
       def logger
-        @logger ||= Logger.new('/tmp/space.log')
+        @logger ||= Logger.new
       end
     end
 

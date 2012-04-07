@@ -2,6 +2,7 @@ module Space
   class Screen
     class Dashboard < View
       def render
+        App.logger.debug('RENDER dashboard')
         clear
         render_header
         render_repos
