@@ -13,8 +13,8 @@ Gem::Specification.new do |s|
   s.description   = "space."
 
   s.files         = Dir.glob("{lib/**/*,[A-Z]*}")
-  s.executables   = 'space'
   s.platform      = Gem::Platform::RUBY
+  s.executables   = ['space']
   s.require_paths = ['lib']
   s.rubyforge_project = '[none]'
 end
