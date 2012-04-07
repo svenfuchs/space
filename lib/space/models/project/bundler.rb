@@ -24,10 +24,6 @@ module Space
           end
           Hash[*values.compact.flatten]
         end
-
-        def notify(*args)
-          super
-        end
       end
     end
   end

@@ -3,23 +3,25 @@ module Space
     class Command
       class Local < Command
         def run
-          project.bundler.buffering do
+          Shell::Watcher.suspend do
             repos.each do |repo|
               system "bundle config --global local.#{repo.name} #{repo.path}"
             end
             confirm
           end
+          project.bundler.refresh
         end
       end
 
       class Remote < Command
         def run
-          project.bundler.buffering do
+          Shell::Watcher.suspend do
             repos.each do |repo|
               system "bundle config --delete local.#{repo.name}"
             end
             confirm
           end
+          project.bundler.refresh
         end
       end
 
@@ -45,7 +47,6 @@ module Space
       # class Checkout < Command
       #   def run
       #     # check if branch exists, git co (-b)
-      #     # check Gemfiles, replace gem "travis-*", :branch => '...' with the new branch
       #   end
       # end
 

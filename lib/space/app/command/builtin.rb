@@ -22,7 +22,6 @@ module Space
             in_scope do |repo|
               repo.refresh
             end
-            project.notify(:update)
           end
         end
       end
