@@ -26,6 +26,7 @@ module Space
     end
 
     def notify(*args)
+      App.logger.debug "Event received: #{event.source.class.name} #{event.type}"
       event = args.first.is_a?(Event) ? args.first : Event.new(self, *args)
       buffering? ? buffer.push(event) : observers.each { |observer| observer.notify(event) }
     end
