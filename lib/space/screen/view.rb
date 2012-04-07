@@ -19,6 +19,7 @@ module Space
         end
 
         def clear
+          return
           print "\e[2J\e[0;0H" # clear screen, move cursor to home
         end
 

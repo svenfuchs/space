@@ -31,13 +31,11 @@ module Space
         end
 
         def trigger(paths)
-          unless Watcher.ignore?
-            refresh
-          end
+          refresh
         end
 
         def targets
-          Array(self.class.watch).map do |path|
+          self.class.watch.map do |path|
             "#{self.path}/#{path}"
           end
         end

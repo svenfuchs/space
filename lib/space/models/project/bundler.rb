@@ -4,7 +4,7 @@ module Space
   module Models
     class Project
       class Bundler
-        include Shell
+        include Events, Shell
 
         commands config: 'bundle config'
 
@@ -23,10 +23,6 @@ module Space
             [name, value =~ /: "(.*)"/ && $1]
           end
           Hash[*values.compact.flatten]
-        end
-
-        def notify(event, data)
-          project.notify(event, data)
         end
       end
     end

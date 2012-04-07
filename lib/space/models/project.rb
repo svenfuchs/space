@@ -38,6 +38,11 @@ module Space
         bundler.refresh
         repos.all.each(&:refresh)
       end
+
+      def subscribe(*args)
+        super
+        [bundler, repos].each { |object| object.subscribe(self) }
+      end
     end
   end
 end

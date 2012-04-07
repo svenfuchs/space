@@ -6,11 +6,12 @@ module Space
       LATENCY = 0
       NO_DEFER = FALSE
 
-      attr_reader :path, :callback
+      attr_reader :path, :callback, :mutex
 
       def initialize(path, &block)
         @path = File.expand_path(path)
         @callback = block
+        @mutex = Mutex.new
         self
       end
 
@@ -25,8 +26,9 @@ module Space
         def watch
           fsevent.watch(path, file: file?, latency: LATENCY, no_defer: NO_DEFER) do |paths|
             fsevent.stop
-            callback.call(paths)
-            # sleep(1)
+            mutex.synchronize do
+              callback.call(paths)
+            end
             fsevent.run
           end
           fsevent.run

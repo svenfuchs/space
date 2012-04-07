@@ -4,7 +4,7 @@ module Space
   module Models
     class Repo
       class Git
-        include Shell
+        include Events, Shell
 
         commands  status: 'git status',
                   branch: 'git branch --no-color',
@@ -45,10 +45,6 @@ module Space
 
         def clean?
           result(:status).include?('nothing to commit (working directory clean)')
-        end
-
-        def notify(event, data)
-          repo.notify(event, data)
         end
       end
     end

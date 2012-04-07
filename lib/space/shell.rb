@@ -9,8 +9,8 @@ module Space
         commands ? @commands = commands : @commands
       end
 
-      def watch(paths = nil)
-        paths ? @paths = paths : @paths
+      def watch(*paths)
+        paths.empty? ? @paths : @paths = paths
       end
     end
 
@@ -50,7 +50,7 @@ module Space
 
     def refresh
       commands.each { |key, command| command.run }
-      notify(:refresh, nil)
+      # notify(:refresh, self.class.name)
     end
   end
 end

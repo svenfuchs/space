@@ -5,6 +5,8 @@ module Space
       autoload :Dependency, 'space/models/repo/dependency'
       autoload :Git,        'space/models/repo/git'
 
+      include Events
+
       attr_reader :project, :path, :git, :bundle
 
       def initialize(project, path)
@@ -46,8 +48,9 @@ module Space
         Dir.chdir(path, &block)
       end
 
-      def notify(event, data)
-        project.notify(event, data)
+      def subscribe(*args)
+        super
+        [git, bundle].each { |object| object.subscribe(self) }
       end
     end
   end

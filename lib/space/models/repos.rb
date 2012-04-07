@@ -34,9 +34,9 @@ module Space
         Collection.new(self, all.select { |repo| names.include?(repo.name) })
       end
 
-      # def add_observer(observer)
-      #   all.each { |repo| repo.add_observer(observer) }
-      # end
+      def subscribe(*args)
+        all.each { |repo| repo.subscribe(*args) }
+      end
     end
   end
 end

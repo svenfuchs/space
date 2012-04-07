@@ -9,6 +9,7 @@ module Space
       end
 
       def notify(event, data)
+        p "RENDER DASHBOARD"
         render(prompt: prompt)
       end
 
