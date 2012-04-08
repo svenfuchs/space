@@ -1,9 +1,9 @@
 module Space
-  module Models
+  module Model
     class Project
-      include Events
+      autoload :Bundler, 'space/model/project/bundler'
 
-      autoload :Bundler, 'space/models/project/bundler'
+      include Events
 
       attr_reader :name, :repos, :bundler, :config
 
@@ -35,13 +35,7 @@ module Space
       end
 
       def refresh
-        bundler.refresh
-        repos.all.each(&:refresh)
-      end
-
-      def subscribe(*args)
-        super
-        [bundler, repos].each { |object| object.subscribe(self) }
+        [bundler, repos].each(&:refresh)
       end
     end
   end

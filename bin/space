@@ -5,4 +5,10 @@ require 'bundler/setup'
 require 'space'
 
 abort 'Need to specify a project name' if ARGV.empty?
+
+paths = Dir[File.expand_path('lib/**/*.rb')]
+paths.each do |path|
+  require path
+end
+
 Space::App.new(ARGV[0]).run

@@ -1,5 +1,5 @@
 module Space
-  class App
+  class Action
     class Parser
       attr_reader :names, :line
 
@@ -11,7 +11,7 @@ module Space
         @line = line
         scope = parse_scope
         command = parse_command
-        [scope || names, command]
+        [scope, command]
       end
 
       private
@@ -19,7 +19,7 @@ module Space
         def parse_scope
           scope = []
           pattern = /^(#{names.join('|')}|\d+)\s*/
-          line.gsub!(pattern) { |repo| scope << resolve(repo.strip); '' } while line =~ pattern
+          line.gsub!(pattern) { |repo| scope << repo.strip; '' } while line =~ pattern
           line.strip!
           scope unless scope.empty?
         end
@@ -28,11 +28,8 @@ module Space
           line.strip
           line unless line.empty?
         end
-
-        def resolve(repo)
-          repo =~ /^\d+$/ ? names[repo.to_i - 1] : repo
-        end
     end
   end
 end
+
 

@@ -23,7 +23,7 @@ describe Space::App do
 
   def stub_commands
     APP_COMMANDS.each do |command, result|
-      Space::Shell::Command.stubs(:execute).with(command).returns(result)
+      Space::Source::Command.stubs(:execute).with(command).returns(result)
     end
   end
 

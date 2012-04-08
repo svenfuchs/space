@@ -1,55 +1,41 @@
+require 'space/logger'
 require 'readline'
+require 'thread'
 
 module Space
   class App
-    autoload :Command, 'space/app/command'
-    autoload :Handler, 'space/app/handler'
-    autoload :Logger,  'space/app/logger'
-    autoload :Parser,  'space/app/parser'
-
-    class << self
-      def logger
-        @logger ||= Logger.new
-      end
-    end
-
-    include Readline
-
     attr_reader :name, :project, :screen
 
     def initialize(name)
       @name    = name
-      @project = Models::Project.new(name)
+      @project = Model::Project.new(name)
       @screen  = Screen.new(project)
-
-      project.subscribe(screen)
     end
 
     def run
-      refresh
-      screen.display(:dashboard)
+      log 'foo'
+      screen.display
+      project.refresh
       cli_loop
+      # Thread.new(&method(:cli_loop))
+      # sleep
+      puts
     end
 
     private
 
-      def refresh
-        screen.display(:progress)
-        project.refresh
-      end
-
       def cli_loop
         loop do
-          line = readline(prompt, true)
-          break if line.nil?
-          handle(line) unless line.empty?
+          print "\e[3;0H"
+          line = Readline.readline(prompt, true) || break
+          handle(line)
         end
+      rescue Exception => e
+        log e.message, e.backtrace
       end
 
       def handle(line)
-        screen.display(:progress)
-        Handler.new(project).run(line)
-        screen.display(:dashboard)
+        Action::Handler.new(project).run(line) unless line.empty?
       end
 
       def prompt
@@ -57,4 +43,3 @@ module Space
       end
   end
 end
-

@@ -1,5 +1,5 @@
 module Space
-  module Models
+  module Model
     class Repo
       class Dependency
         attr_reader :repo, :ref

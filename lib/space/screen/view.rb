@@ -13,12 +13,8 @@ module Space
 
       private
 
-        def clear
-          print "\e[2J\e[0;0H" # clear screen, move cursor to home
-        end
-
-        def render_header
-          puts "Project #{project.name}\n\n"
+        def move(x, y)
+          print "\e[#{y};#{x}H"
         end
 
         def render_template(name, assigns)

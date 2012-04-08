@@ -1,18 +1,16 @@
-require 'observer'
-
 module Space
-  module Models
+  module Model
     class Repo
       class Bundle
-        include Events, Shell
+        include Source
 
-        commands check: 'bundle check',
+        commands check: 'bundle check --no-lock',
                  list:  'bundle list'
 
         watch 'Gemfile',
               'Gemfile.lock'
 
-        attr_reader :repo, :repos
+        attr_reader :repos
 
         def initialize(repo, repos)
           @repo = repo
@@ -25,7 +23,7 @@ module Space
         end
 
         def info
-          result(:check).split("\n").first
+          result(:check).split("\n").first || ''
         end
 
         def deps
@@ -37,3 +35,4 @@ module Space
     end
   end
 end
+

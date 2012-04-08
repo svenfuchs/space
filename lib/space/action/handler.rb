@@ -1,5 +1,7 @@
+require 'core_ext/string/demodulize'
+
 module Space
-  class App
+  class Action
     class Handler
       ALIASES = {
         ''  => 'scope',
@@ -14,33 +16,39 @@ module Space
 
       def run(line)
         scope, type = parse(line)
-        command = command_for(scope, type)
-        command.run
+        action = action_for(scope, type)
+        action.run
+        Events.flush
       end
 
       private
 
-        def command_for(scope, type)
+        def action_for(scope, type)
           const = const_for(type)
-          args  = [project, scope]
-          args << type if const == Command::Execute
+          repos = repos_for(scope)
+          args  = [project, repos]
+          args << type if const == Action::Execute
           const.new(*args)
         end
 
         def parse(line)
-          Parser.new(project.names).parse(line)
+          Parser.new(project.repos.names).parse(line)
         end
 
         def const_for(type)
-          Command.const_get(const_name(type))
+          Action.const_get(const_name(type))
         rescue NameError
-          Command::Execute
+          Action::Execute
         end
 
         def const_name(type)
           type = (type || '').strip
           type = ALIASES[type] if ALIASES.key?(type)
           type.capitalize
+        end
+
+        def repos_for(scope)
+          scope ? project.repos.select_by_names_or_numbers(scope) : project.repos.scope.self_and_deps
         end
     end
   end
