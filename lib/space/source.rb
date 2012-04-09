@@ -45,7 +45,7 @@ module Space
 
     def update(key, result)
       results[key] = result
-      trigger(:update)
+      notify(:update)
     end
   end
 end

@@ -16,13 +16,17 @@ module Space
       end
 
       def register(source)
-          events.trigger(:start) if sources.empty?
+        Thread.exclusive do
+          events.notify(:start) if sources.empty?
           sources << source
+        end
       end
 
       def unregister(source)
+        Thread.exclusive do
           sources.delete(source)
-          events.trigger(:finish) if sources.empty?
+          events.notify(:finish) if sources.empty?
+        end
       end
     end
   end

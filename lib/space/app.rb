@@ -13,7 +13,6 @@ module Space
     end
 
     def run
-      log 'foo'
       screen.display
       project.refresh
       cli_loop

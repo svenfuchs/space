@@ -29,14 +29,14 @@ module Space
     class Scope < Action
       def run
         project.repos.scope = scope
-        Events.trigger(:finish)
+        Events.notify(:finish)
       end
     end
 
     class Unscope < Action
       def run
         project.repos.scope = nil
-        Events.trigger(:finish)
+        Events.notify(:finish)
       end
     end
   end

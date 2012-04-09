@@ -20,10 +20,6 @@ module Space
         subscriptions << Subscription.new(observer, types)
       end
 
-      def trigger(event)
-        notify(event)
-      end
-
       def flush
         event = events.first
         events.clear
@@ -31,14 +27,15 @@ module Space
       end
 
       def notify(event)
+        # log event
         subscriptions.each do |subscription|
           subscription.notify(event)
         end
       end
     end
 
-    def trigger(*args)
-      Events.trigger(*args)
+    def notify(*args)
+      Events.notify(*args)
     end
   end
 end

@@ -1,11 +1,13 @@
-require 'ansi/code'
+require 'open3'
+require 'core_ext/string/deansi'
 
 module Space
   module Source
     class Command
       class << self
-        def execute(command)
-          `#{command}`
+        def execute(dir, command)
+          log "#{File.basename(dir)} $ #{command}"
+          Open3.capture2e("cd #{dir}; #{command}").first
         end
       end
 
@@ -36,17 +38,14 @@ module Space
         end
 
         def execute
-          log "#{File.basename(source.path)} $ #{command}"
-          self.class.execute(command)
+          self.class.execute(source.path, command)
         end
 
         def filters
           [
             Events.sources.method(:registered),
             method(:update),
-            Thread.method(:exclusive),
             method(:clean),
-            method(:chdir),
             ::Bundler.method(:with_clean_env)
           ]
         end
@@ -64,7 +63,7 @@ module Space
         end
 
         def strip_ansi(string)
-          string.gsub(ANSI::Code::PATTERN, '')
+          string.deansi
         end
     end
   end
