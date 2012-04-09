@@ -2,11 +2,10 @@ require 'erb'
 
 module Space
   class View
+    autoload :Dashboard, 'space/view/dashboard'
     autoload :Helpers,   'space/view/helpers'
     autoload :Progress,  'space/view/progress'
-    autoload :Dashboard, 'space/view/dashboard'
-
-    include Helpers
+    autoload :Template,  'space/view/template'
 
     attr_reader :project
 

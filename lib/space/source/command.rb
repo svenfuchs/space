@@ -1,3 +1,4 @@
+require 'bundler'
 require 'open3'
 require 'core_ext/string/deansi'
 
