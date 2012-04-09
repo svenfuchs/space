@@ -20,12 +20,6 @@ module Space
         subscriptions << Subscription.new(observer, types)
       end
 
-      def flush
-        event = events.first
-        events.clear
-        notify(event, false) if event
-      end
-
       def notify(event)
         # log event
         subscriptions.each do |subscription|

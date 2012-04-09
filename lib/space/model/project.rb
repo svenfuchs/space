@@ -2,6 +2,7 @@ module Space
   module Model
     class Project
       autoload :Bundler, 'space/model/project/bundler'
+      autoload :Tmux,    'space/model/project/tmux'
 
       include Events
 

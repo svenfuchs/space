@@ -17,8 +17,9 @@ module Space
       def run(line)
         scope, type = parse(line)
         action = action_for(scope, type)
-        action.run
-        Events.flush
+        Events.sources.registered do
+          action.run
+        end
       end
 
       private

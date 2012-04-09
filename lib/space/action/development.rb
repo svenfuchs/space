@@ -2,23 +2,19 @@ module Space
   class Action
     class Local < Action
       def run
-        Events.sources.registered do
-          scope.each do |repo|
-            system "bundle config --global local.#{repo.name} #{repo.path}"
-          end
-          sleep 0.2 # not perfect, but fsevent is too slow to trigger
+        scope.each do |repo|
+          system "bundle config --global local.#{repo.name} #{repo.path}"
         end
+        confirm
       end
     end
 
     class Remote < Action
       def run
-        Events.sources.registered do
-          scope.each do |repo|
-            system "bundle config --delete local.#{repo.name}"
-          end
-          sleep 0.2
+        scope.each do |repo|
+          system "bundle config --delete local.#{repo.name}"
         end
+        confirm
       end
     end
 

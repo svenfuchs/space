@@ -30,8 +30,13 @@ module Space
         scope.each { |repo| yield repo }
       end
 
+      def in_repo(repo, &block)
+        puts "in #{repo.path}".ansi(:bold, :green)
+        Dir.chdir(repo.path, &block)
+      end
+
       def system(cmd)
-        puts cmd
+        puts "#{cmd.ansi(:bold, :black)}\n"
         super
       end
 

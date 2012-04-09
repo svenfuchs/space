@@ -4,16 +4,13 @@ module Space
   class Action
     class Execute < Action
       def run
-        Events.sources.registered do
-          in_scope do |repo|
-            Dir.chdir(repo.path) do
-              puts "in #{repo.path}\n".ansi(:bold, :green)
-              system(*args)
-              puts
-            end
+        in_scope do |repo|
+          in_repo(repo) do
+            system(*args)
+            puts
           end
-          confirm
         end
+        confirm
       end
     end
 

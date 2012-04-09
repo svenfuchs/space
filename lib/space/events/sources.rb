@@ -15,19 +15,21 @@ module Space
         end
       end
 
-      def register(source)
-        Thread.exclusive do
-          events.notify(:start) if sources.empty?
-          sources << source
-        end
-      end
+      private
 
-      def unregister(source)
-        Thread.exclusive do
-          sources.delete(source)
-          events.notify(:finish) if sources.empty?
+        def register(source)
+          Thread.exclusive do
+            events.notify(:start) if sources.empty?
+            sources << source
+          end
         end
-      end
+
+        def unregister(source)
+          Thread.exclusive do
+            sources.delete(source)
+            events.notify(:finish) if sources.empty?
+          end
+        end
     end
   end
 end

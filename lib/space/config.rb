@@ -17,7 +17,7 @@ module Space
         end
     end
 
-    define :template_dir => File.expand_path('../templates', __FILE__)
+    define :template_dir => File.expand_path('../view/templates', __FILE__)
 
     def paths
       @paths ||= repositories.map { |path| base_dir ? "#{base_dir}/#{path}" : path }

@@ -6,12 +6,11 @@ module Space
       LATENCY = 0.1
       NO_DEFER = FALSE
 
-      attr_reader :path, :callback, :suspended, :fsevent
+      attr_reader :path, :callback, :fsevent
 
       def initialize(path, &block)
         @path = File.expand_path(path)
         @callback = block
-        # @suspended = []
         @fsevent = FSEvent.new
       end
 
@@ -23,23 +22,16 @@ module Space
         self
       end
 
-      # def suspended?
-      #   !suspended.empty?
-      # end
-
-      # def suspend
-      #   suspended << true
-      # end
-
-      # def unsuspend
-      #   suspended.pop
-      # end
-
       private
 
         def watch
           fsevent.watch(path, file: file?, latency: LATENCY, no_defer: NO_DEFER) do |paths|
-            unless git_dir?(paths)
+            # git touches the .git dir on `git status` as we use this command
+            # internally we need to ignore this. as no other relevant action
+            # only touches the .git dir, we can just skip it.
+            paths.reject!(&method(:git_dir?))
+
+            unless paths.empty?
               log "=> WATCH triggered: #{paths.inspect}"
               fsevent.stop
               callback.call(paths)
@@ -55,8 +47,8 @@ module Space
           File.file?(path)
         end
 
-        def git_dir?(paths)
-          paths.size == 1 && File.basename(paths.first) == '.git'
+        def git_dir?(path)
+          File.basename(path) == '.git'
         end
     end
   end
