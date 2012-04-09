@@ -1,22 +1,16 @@
 require 'spec_helper'
 
-class Shell
-  include Space::Shell
+class Source
+  include Space::Source
   commands :list => 'ls -al'
 end
 
-describe Space::Shell do
-  let(:shell) {  Shell.new('path') }
+describe Space::Source do
+  let(:shell) {  Source.new('path') }
 
   describe '.commands' do
     it 'defines the commands this class cares about' do
-      Shell.commands[:list].should == 'ls -al'
-    end
-  end
-
-  describe 'initialize' do
-    it 'registers the consumer class to Space::Shell.all' do
-      Space::Shell.all.should include(shell)
+      Source.commands[:list].should == 'ls -al'
     end
   end
 

@@ -34,7 +34,7 @@ describe Space::Config do
 
   describe 'defaults' do
     it 'template_dir defaults to the expanded path lib/space/templates' do
-      config.template_dir.should == File.expand_path('../../lib/space/templates', __FILE__)
+      config.template_dir.should == File.expand_path('../../lib/space/view/templates', __FILE__)
     end
   end
 end

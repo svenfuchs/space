@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Space::Models::Project::Bundler do
+describe Space::Model::Project::Bundler do
   BUNDLER_RESULTS = {
     :config => <<-config
 Settings are listed in order of priority. The top value will be used.
@@ -14,10 +14,10 @@ config
   }
 
   let(:project) { stub('project') }
-  let(:bundler) { Space::Models::Project::Bundler.new(project) }
+  let(:bundler) { Space::Model::Project::Bundler.new(project) }
 
   def stub_command(command, result = command)
-    bundler.commands[command].stubs(:result).returns BUNDLER_RESULTS[result].dup
+    bundler.stubs(:result).with(command).returns BUNDLER_RESULTS[result].dup
   end
 
   describe 'config' do

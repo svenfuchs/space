@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Space::Models::Repo::Git do
+describe Space::Model::Repo::Git do
   GIT_RESULTS = {
     branch:       %(  feature\n* master\n),
     commit:       %(commit ce8fb952efdd29371ebdc572f8f47e59a9bd5ee5\nAuthor: Sven Fuchs <svenfuchs@artweb-design.de>\nDate:   Fri Apr 6 23:17:04 2012 +0200),
@@ -12,10 +12,10 @@ describe Space::Models::Repo::Git do
   }
 
   let(:repo) { stub('repo', :path => '.') }
-  let(:git)  { Space::Models::Repo::Git.new(repo) }
+  let(:git)  { Space::Model::Repo::Git.new(repo) }
 
   def stub_command(command, result)
-    git.commands[command].stubs(:result).returns GIT_RESULTS[result]
+    git.stubs(:result).with(command).returns GIT_RESULTS[result]
   end
 
   it 'branch returns the git branch' do

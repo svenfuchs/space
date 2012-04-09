@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Space::Models::Repo::Bundle do
+describe Space::Model::Repo::Bundle do
   BUNDLE_RESULTS = {
     check_clean: %(The Gemfile's dependencies are satisfied),
     check_dirty: %(Your Gemfile's dependencies could not be satisfied),
@@ -9,10 +9,10 @@ describe Space::Models::Repo::Bundle do
 
   let(:repo)    { stub('repo', path: '.') }
   let(:repos)   { stub('repos', names: %w(travis-ci), find_by_name: repo) }
-  let(:bundle)  { Space::Models::Repo::Bundle.new(repo, repos) }
+  let(:bundle)  { Space::Model::Repo::Bundle.new(repo, repos) }
 
   def stub_command(command, result = command)
-    bundle.commands[command].stubs(:result).returns BUNDLE_RESULTS[result].dup
+    bundle.stubs(:result).with(command).returns BUNDLE_RESULTS[result].dup
   end
 
   describe 'clean?' do
