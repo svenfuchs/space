@@ -2,6 +2,11 @@ require 'mocha'
 require 'space'
 require 'ansi'
 
+module Kernel
+  def log(*)
+  end
+end
+
 module Ansi
   def strip_ansi(string)
     string.gsub!(/\e\[[\d]+(;[\d]+)?m/, '')

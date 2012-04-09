@@ -6,7 +6,9 @@ module Space
       ALIASES = {
         ''  => 'scope',
         '-' => 'unscope',
-        'r' => 'refresh'
+        '!' => 'refresh',
+        'r' => 'remote',
+        'l' => 'local'
       }
       attr_reader :project
 

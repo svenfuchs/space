@@ -5,4 +5,3 @@ module Enumerable
     result
   end unless method_defined?(:map_slice)
 end
-

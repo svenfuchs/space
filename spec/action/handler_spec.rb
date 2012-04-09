@@ -10,7 +10,7 @@ describe Space::Action::Handler do
   end
 
   describe 'action_for' do
-    it 'returns a Command::Refresh instance for an empty command string' do
+    it 'returns a Command::Refresh instance for "refresh"' do
       action_for('refresh').should be_a(Space::Action::Refresh)
     end
 
@@ -24,6 +24,10 @@ describe Space::Action::Handler do
 
     it 'returns a Command::Execute instance for "ls -al"' do
       action_for('ls -al').should be_a(Space::Action::Execute)
+    end
+
+    it 'resolves aliases' do
+      action_for('r').should be_a(Space::Action::Remote)
     end
   end
 end
