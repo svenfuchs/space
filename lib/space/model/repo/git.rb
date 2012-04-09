@@ -17,6 +17,14 @@ module Space
           super(repo.path)
         end
 
+        def branch
+          result(:branch) =~ /^\* (.+)/ && $1.strip
+        end
+
+        def commit
+          result(:commit) =~ /^commit (\S{7})/ && $1
+        end
+
         def status
           dirty? ? :dirty : (ahead? ? :ahead : :clean)
         end
@@ -25,24 +33,16 @@ module Space
           !clean?
         end
 
+        def clean?
+          result(:status) =~ /working directory clean/m
+        end
+
         def ahead?
           ahead > 0
         end
 
-        def clean?
-          result(:status) =~ /nothing to commit (working directory clean)/
-        end
-
         def ahead
           result(:status) =~ /Your branch is ahead of .* by (\d+) commits?\./ ? $1.to_i : 0
-        end
-
-        def branch
-          result(:branch) =~ /^\* (.+)/ && $1.strip
-        end
-
-        def commit
-          result(:commit) =~ /^commit (\S{7})/ && $1
         end
       end
     end
