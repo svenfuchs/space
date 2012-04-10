@@ -41,7 +41,7 @@ This screencast is from a very early version but still mostly valid. It also
 demonstrates how screen can be used to run commands on multiple repositories at
 once:
 
-[![screencast](http://img.skitch.com/20120410-gyiprdiy8jyhwwp3pd4gafk3tu.png)](www.youtube.com/watch?v=NfYZysobsYo)
+[![screencast](http://img.skitch.com/20120410-gyiprdiy8jyhwwp3pd4gafk3tu.png)](http://www.youtube.com/watch?v=NfYZysobsYo)
 
 ## Installation
 
