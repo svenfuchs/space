@@ -5,10 +5,6 @@ require 'core_ext/string/wrap'
 module Space
   class View
     module Helpers
-      def project_title
-        "Project: #{name}".ansi(:bold)
-      end
-
       def tableize(string)
         string.split(' ')
         project.local_repos.join(', ')
