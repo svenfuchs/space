@@ -4,7 +4,7 @@ module Space
       class Bundle
         include Source
 
-        commands check: 'bundle check --no-lock',
+        commands check: 'bundle check --dry-run',
                  list:  'bundle list'
 
         watch 'Gemfile',
