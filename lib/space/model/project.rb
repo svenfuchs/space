@@ -28,7 +28,7 @@ module Space
 
       def number(name)
         if number = names.index(name)
-          number + 1
+          number
         else
           names << name
           number(name)
